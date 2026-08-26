@@ -16,6 +16,7 @@ interface InvoicePreviewProps {
   totalAmount: number;
   paidAmount: number;
   unpaidAmount: number;
+  invoiceType: string;
 }
 
 export const InvoicePreview: React.FC<InvoicePreviewProps> = ({
@@ -30,6 +31,7 @@ export const InvoicePreview: React.FC<InvoicePreviewProps> = ({
   totalAmount,
   paidAmount,
   unpaidAmount,
+  invoiceType,
 }) => {
   return (
     <div className="bg-white rounded-2xl border border-slate-200/80 p-6 md:p-8 shadow-md flex flex-col justify-between print-container">
@@ -61,6 +63,7 @@ export const InvoicePreview: React.FC<InvoicePreviewProps> = ({
           totalAmount={totalAmount}
           paidAmount={paidAmount}
           unpaidAmount={unpaidAmount}
+          invoiceType={invoiceType}
         />
 
       </div>
