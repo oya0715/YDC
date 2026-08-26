@@ -620,6 +620,70 @@
       { id: "3", name: "メンテナンス", unitPrice: 5000, quantity: 2, note: "定期健診・PMTC" }
     ];
 
+    const shouldShowToothSelector = (itemName) => {
+      const preset = PRESETS.find(p => p.name === itemName);
+      if (!preset) return true;
+      return ['補綴', 'インプラント', 'その他', 'DEN'].includes(preset.category);
+    };
+
+    window.toggleTooth = function(itemId, toothId) {
+      const item = state.items.find(it => it.id === itemId);
+      if (!item) return;
+      
+      let selectedTeeth = item.note ? item.note.split(', ') : [];
+      const index = selectedTeeth.indexOf(toothId);
+      if (index > -1) {
+        selectedTeeth.splice(index, 1);
+      } else {
+        selectedTeeth.push(toothId);
+      }
+      
+      // Sort anatomically
+      const toothOrder = [
+        '右上8','右上7','右上6','右上5','右上4','右上3','右上2','右上1',
+        '左上1','左上2','左上3','左上4','左上5','左上6','左上7','左上8',
+        '右下8','右下7','右下6','右下5','右下4','右下3','右下2','右下1',
+        '左下1','左下2','左下3','左下4','左下5','左下6','左下7','左下8'
+      ];
+      selectedTeeth.sort((a, b) => toothOrder.indexOf(a) - toothOrder.indexOf(b));
+      
+      item.note = selectedTeeth.join(', ');
+      saveState();
+      validate();
+      renderTreatmentItems();
+      renderInvoicePreview();
+    };
+
+    window.clearTeeth = function(itemId) {
+      const item = state.items.find(it => it.id === itemId);
+      if (!item) return;
+      
+      item.note = '';
+      saveState();
+      validate();
+      renderTreatmentItems();
+      renderInvoicePreview();
+    };
+
+    function renderToothButton(itemId, toothId, numLabel) {
+      const item = state.items.find(it => it.id === itemId);
+      const selectedTeeth = (item && item.note) ? item.note.split(', ') : [];
+      const isSelected = selectedTeeth.includes(toothId);
+      
+      const activeClass = "bg-clinic-500 text-white border-clinic-600 shadow-sm font-bold scale-105";
+      const inactiveClass = "bg-white text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-slate-800";
+      
+      return `
+        <button
+          type="button"
+          onclick="toggleTooth('${itemId}', '${toothId}')"
+          class="w-6 h-6 text-[10px] rounded border flex items-center justify-center transition-all cursor-pointer ${isSelected ? activeClass : inactiveClass}"
+        >
+          ${numLabel}
+        </button>
+      `;
+    }
+
     // 2. Local State Management
     let state = {
       patientInfo: { ...initialPatientInfo },
@@ -786,7 +850,7 @@
           </button>
 
           <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 pr-8">
-            <div class="sm:col-span-6">
+            <div class="sm:col-span-5">
               <label class="block text-xs font-semibold text-slate-500 mb-1">診療項目名 <span class="text-rose-500">*</span></label>
               <div class="flex gap-2">
                 <select
@@ -805,7 +869,7 @@
               </div>
             </div>
 
-            <div class="sm:col-span-4">
+            <div class="sm:col-span-3">
               <label class="block text-xs font-semibold text-slate-500 mb-1">単価 (円) <span class="text-rose-500">*</span></label>
               <div class="relative">
                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">¥</span>
@@ -832,21 +896,56 @@
               />
             </div>
 
-            <div class="sm:col-span-8">
-              <label class="block text-xs font-semibold text-slate-500 mb-1">備考</label>
-              <input
-                type="text"
-                value="${item.note || ''}"
-                oninput="updateItemField('${item.id}', 'note', this.value)"
-                placeholder="例: 上顎前歯、右奥歯など (請求書に表示)"
-                class="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-clinic-500"
-              />
-            </div>
-
-            <div class="sm:col-span-4 flex flex-col justify-end text-right">
+            <div class="sm:col-span-2 flex flex-col justify-end text-right">
               <span class="text-xs text-slate-400 font-semibold mb-1">金額</span>
               <span class="text-base font-bold text-slate-700 py-1">${formatYen(item.unitPrice * item.quantity)}</span>
             </div>
+
+            ${shouldShowToothSelector(item.name) ? `
+              <div class="sm:col-span-12 mt-2 bg-slate-50 border border-slate-200/60 p-3 rounded-xl">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-bold text-slate-600">歯の部位を選択 (複数選択可)</span>
+                  <button onclick="clearTeeth('${item.id}')" type="button" class="text-[10px] font-semibold text-slate-500 hover:text-rose-500 transition-colors">選択をクリア</button>
+                </div>
+                
+                <div class="overflow-x-auto w-full">
+                  <div class="flex flex-col items-center gap-1.5 font-mono text-xs select-none min-w-[360px] py-1">
+                    <!-- Upper Row -->
+                    <div class="flex items-center gap-1">
+                      <div class="flex items-center gap-0.5">
+                        <span class="text-[9px] font-bold text-slate-400 mr-1.5 self-center">右上</span>
+                        ${[8,7,6,5,4,3,2,1].map(num => renderToothButton(item.id, `右上${num}`, num)).join('')}
+                      </div>
+                      <div class="w-px h-6 bg-slate-300 mx-2"></div>
+                      <div class="flex items-center gap-0.5">
+                        ${[1,2,3,4,5,6,7,8].map(num => renderToothButton(item.id, `左上${num}`, num)).join('')}
+                        <span class="text-[9px] font-bold text-slate-400 ml-1.5 self-center">左上</span>
+                      </div>
+                    </div>
+                    
+                    <div class="w-full border-t border-dashed border-slate-200 my-0.5"></div>
+                    
+                    <!-- Lower Row -->
+                    <div class="flex items-center gap-1">
+                      <div class="flex items-center gap-0.5">
+                        <span class="text-[9px] font-bold text-slate-400 mr-1.5 self-center">右下</span>
+                        ${[8,7,6,5,4,3,2,1].map(num => renderToothButton(item.id, `右下${num}`, num)).join('')}
+                      </div>
+                      <div class="w-px h-6 bg-slate-300 mx-2"></div>
+                      <div class="flex items-center gap-0.5">
+                        ${[1,2,3,4,5,6,7,8].map(num => renderToothButton(item.id, `左下${num}`, num)).join('')}
+                        <span class="text-[9px] font-bold text-slate-400 ml-1.5 self-center">左下</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="mt-2 text-[10px] text-slate-500 font-semibold flex items-center gap-1.5">
+                  <span class="bg-slate-200 px-1.5 py-0.5 rounded text-slate-600">選択中</span>
+                  <span class="text-slate-700">${item.note || 'なし'}</span>
+                </div>
+              </div>
+            ` : ''}
           </div>
         `;
         container.appendChild(row);
