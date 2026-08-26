@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>歯科自費診療 請求書・見積書作成システム</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- サイドバー / メインナビゲーション -->
+    <header class="app-header no-print">
+      <div class="header-logo">
+        <i data-lucide="heart-pulse" class="logo-icon"></i>
+        <h1>歯科自費診療 <span>請求書・見積書作成</span></h1>
+      </div>
+      <div class="header-actions">
+        <!-- ドキュメントタイプ切り替え -->
+        <div class="toggle-group">
+          <input type="radio" id="type-invoice" name="doc-type" value="invoice" checked>
+          <label for="type-invoice"><i data-lucide="file-text"></i> 請求書</label>
+          <input type="radio" id="type-estimate" name="doc-type" value="estimate">
+          <label for="type-estimate"><i data-lucide="calculator"></i> 見積書</label>
+        </div>
+        <!-- 画面モード切り替え -->
+        <div class="toggle-group mode-toggle">
+          <input type="radio" id="mode-edit" name="view-mode" value="edit" checked>
+          <label for="mode-edit"><i data-lucide="edit-3"></i> 編集・作成</label>
+          <input type="radio" id="mode-preview" name="view-mode" value="preview">
+          <label for="mode-preview"><i data-lucide="eye"></i> プレビュー</label>
+        </div>
+        <button id="btn-print" class="btn btn-primary"><i data-lucide="printer"></i> 印刷・PDF出力</button>
+      </div>
+    </header>
+
+    <div class="app-container">
+      <!-- 編集パネル -->
+      <main class="panel panel-edit no-print" id="panel-edit">
+        <div class="editor-grid">
+          
+          <!-- 左カラム：各種設定と基本入力 -->
+          <div class="editor-main-col">
+            <!-- 患者・基本情報 -->
+            <section class="editor-section card">
+              <h2 class="section-title"><i data-lucide="user"></i> 基本情報・患者情報</h2>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="input-doc-id">文書番号 (自動採番)</label>
+                  <div class="input-with-action">
+                    <input type="text" id="input-doc-id" placeholder="INV-20260826-001">
+                    <button type="button" id="btn-regen-id" title="再採番" class="btn-icon"><i data-lucide="refresh-cw"></i></button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="input-issue-date">発行日</label>
+                  <input type="date" id="input-issue-date">
+                </div>
+                <div class="form-group">
+                  <label for="input-due-date">支払期日</label>
+                  <input type="date" id="input-due-date">
+                </div>
+                <div class="form-group">
+                  <label for="input-patient-id">カルテNo. / 診察券番号</label>
+                  <input type="text" id="input-patient-id" placeholder="0001234">
+                </div>
+                <div class="form-group full-width">
+                  <label for="input-patient-name">患者氏名</label>
+                  <div class="input-suffix">
+                    <input type="text" id="input-patient-name" placeholder="山田 花子">
+                    <span class="suffix-text">様</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- 明細入力テーブル -->
+            <section class="editor-section card">
+              <div class="section-header">
+                <h2 class="section-title"><i data-lucide="list"></i> 診療明細</h2>
+                <div class="section-actions">
+                  <button type="button" id="btn-clear-items" class="btn btn-secondary btn-sm text-danger"><i data-lucide="trash-2"></i> 全クリア</button>
+                </div>
+              </div>
+              
+              <div class="table-responsive">
+                <table class="items-table" id="items-table">
+                  <thead>
+                    <tr>
+                      <th width="50" class="text-center">順序</th>
+                      <th width="140">診療区分 / 歯式</th>
+                      <th>診療内容 / 項目名</th>
+                      <th width="120">保証期間</th>
+                      <th width="80" class="text-right">数量</th>
+                      <th width="120" class="text-right" id="th-price-label">単価 (税込)</th>
+                      <th width="120" class="text-right" id="th-amount-label">金額 (税込)</th>
+                      <th>備考</th>
+                      <th width="60" class="text-center">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody id="items-tbody">
+                    <!-- JavaScriptで動的生成 -->
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-footer-actions">
+                <button type="button" id="btn-add-item" class="btn btn-secondary"><i data-lucide="plus"></i> 行を追加</button>
+              </div>
+            </section>
+
+            <!-- プリセット選択エリア -->
+            <section class="editor-section card">
+              <h2 class="section-title"><i data-lucide="sparkles"></i> 診療メニュー プリセット（クリックで追加）</h2>
+              <div class="presets-container" id="presets-container">
+                <!-- JavaScriptでプリセットボタンを生成 -->
+              </div>
+            </section>
+
+            <!-- 金額集計エリア -->
+            <section class="editor-section card">
+              <h2 class="section-title"><i data-lucide="coins"></i> 合計計算・税区分</h2>
+              <div class="calculations-grid">
+                <!-- 税区分 & 税率の設定 -->
+                <div class="calc-settings-row">
+                  <div class="form-group">
+                    <label>金額の税区分</label>
+                    <div class="toggle-group tax-mode-toggle">
+                      <input type="radio" id="tax-inclusive" name="tax-mode" value="inclusive" checked>
+                      <label for="tax-inclusive">税込入力</label>
+                      <input type="radio" id="tax-exclusive" name="tax-mode" value="exclusive">
+                      <label for="tax-exclusive">税抜入力</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="select-tax-rate">消費税率</label>
+                    <div class="input-with-action">
+                      <select id="select-tax-rate">
+                        <option value="0.10">10%</option>
+                        <option value="0.08">8%</option>
+                        <option value="0.05">5%</option>
+                        <option value="0">非課税 (0%)</option>
+                        <option value="custom">カスタム</option>
+                      </select>
+                      <input type="number" id="input-custom-tax-rate" class="hidden" placeholder="10" min="0" max="100" style="width: 70px;">
+                      <span id="custom-tax-rate-symbol" class="suffix-text hidden">%</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 値引き & 調整額の入力 -->
+                <div class="calc-inputs-row">
+                  <div class="form-group">
+                    <label for="input-discount">値引き額</label>
+                    <div class="input-currency">
+                      <span class="currency-symbol">¥</span>
+                      <input type="number" id="input-discount" class="text-right font-semibold" value="0" min="0" step="500">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="input-adjustment">端数調整額</label>
+                    <div class="input-currency">
+                      <span class="currency-symbol">¥</span>
+                      <input type="number" id="input-adjustment" class="text-right font-semibold" value="0" step="1">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 集計結果表示 -->
+                <div class="calc-row">
+                  <span class="calc-label">明細合計 (<span id="calc-sum-type">税込</span>):</span>
+                  <span class="calc-val" id="calc-items-sum">¥0</span>
+                </div>
+                <div class="calc-row" id="calc-discount-row">
+                  <span class="calc-label">値引き額:</span>
+                  <span class="calc-val text-danger" id="calc-discount-val">-¥0</span>
+                </div>
+                <div class="calc-row">
+                  <span class="calc-label">小計 (<span id="calc-subtotal-type">税抜</span>):</span>
+                  <span class="calc-val" id="calc-subtotal">¥0</span>
+                </div>
+                <div class="calc-row">
+                  <span class="calc-label">課税対象額 (<span id="calc-tax-rate-label">10%</span>):</span>
+                  <span class="calc-val" id="calc-taxable">¥0</span>
+                </div>
+                <div class="calc-row">
+                  <span class="calc-label">消費税額:</span>
+                  <span class="calc-val" id="calc-tax-amount">¥0</span>
+                </div>
+                <div class="calc-row" id="calc-adjustment-row">
+                  <span class="calc-label">端数調整額:</span>
+                  <span class="calc-val" id="calc-adjustment-val">¥0</span>
+                </div>
+                <div class="calc-row highlight">
+                  <span class="calc-label"><span class="dynamic-doc-type">請求</span>合計額 (税込):</span>
+                  <span class="calc-val" id="calc-total">¥0</span>
+                </div>
+                <div class="calc-row payment-input">
+                  <label for="input-deposit" class="calc-label">既収金 (内金・手付金):</label>
+                  <div class="input-currency">
+                    <span class="currency-symbol">¥</span>
+                    <input type="number" id="input-deposit" class="text-right font-semibold" value="0" min="0" step="1000">
+                  </div>
+                </div>
+                <div class="calc-row highlight-danger">
+                  <span class="calc-label" id="label-due-amount">今回請求残額 (税込):</span>
+                  <span class="calc-val" id="calc-due-amount">¥0</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- 医療特記事項・フッター設定 -->
+            <section class="editor-section card">
+              <h2 class="section-title"><i data-lucide="file-warning"></i> 特記事項・支払い方法案内</h2>
+              <div class="footer-settings-grid">
+                <div class="form-group full-width">
+                  <label for="select-note-template">特記事項テンプレート</label>
+                  <select id="select-note-template">
+                    <option value="standard">標準（医療費控除の案内あり）</option>
+                    <option value="none">なし（空欄）</option>
+                    <option value="custom">カスタム（自由に編集）</option>
+                  </select>
+                </div>
+                <div class="form-group full-width">
+                  <label for="input-notes">特記事項本文</label>
+                  <textarea id="input-notes" rows="4" placeholder="医療費控除等に関する説明文"></textarea>
+                </div>
+                <div class="form-group full-width">
+                  <label for="input-payment-info">支払い方法案内</label>
+                  <textarea id="input-payment-info" rows="2" placeholder="現金、クレジットカード、デンタルローン、銀行振込がご利用いただけます。"></textarea>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- 右カラム：医院情報設定・履歴管理 -->
+          <div class="editor-side-col">
+            <!-- 医院情報（発行元）設定 -->
+            <section class="editor-section card collapsed" id="section-clinic-settings">
+              <div class="section-header clickable" id="toggle-clinic-settings">
+                <h2 class="section-title"><i data-lucide="hospital"></i> 医院情報設定</h2>
+                <i data-lucide="chevron-down" class="toggle-icon"></i>
+              </div>
+              <div class="collapsible-content">
+                <div class="form-grid">
+                  <div class="form-group full-width">
+                    <label for="clinic-name">医院名</label>
+                    <input type="text" id="clinic-name" placeholder="あおぞら歯科クリニック">
+                  </div>
+                  <div class="form-group">
+                    <label for="clinic-zip">郵便番号</label>
+                    <input type="text" id="clinic-zip" placeholder="123-4567">
+                  </div>
+                  <div class="form-group">
+                    <label for="clinic-tel">電話番号</label>
+                    <input type="text" id="clinic-tel" placeholder="03-1234-5678">
+                  </div>
+                  <div class="form-group full-width">
+                    <label for="clinic-address">住所</label>
+                    <input type="text" id="clinic-address" placeholder="東京都港区南青山1-2-3">
+                  </div>
+                  <div class="form-group full-width">
+                    <label for="clinic-invoice-no">インボイス登録番号</label>
+                    <input type="text" id="clinic-invoice-no" placeholder="T1234567890123">
+                  </div>
+                  <div class="form-group full-width">
+                    <h3 class="sub-section-title">振込先口座情報</h3>
+                  </div>
+                  <div class="form-group">
+                    <label for="bank-name">銀行名</label>
+                    <input type="text" id="bank-name" placeholder="ひまわり銀行">
+                  </div>
+                  <div class="form-group">
+                    <label for="bank-branch">支店名</label>
+                    <input type="text" id="bank-branch" placeholder="本支店">
+                  </div>
+                  <div class="form-group">
+                    <label for="bank-type">口座種別</label>
+                    <select id="bank-type">
+                      <option value="普通">普通</option>
+                      <option value="当座">当座</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="bank-no">口座番号</label>
+                    <input type="text" id="bank-no" placeholder="1234567">
+                  </div>
+                  <div class="form-group full-width">
+                    <label for="bank-owner">口座名義 (カナ)</label>
+                    <input type="text" id="bank-owner" placeholder="イリョウホウジン アオゾラシカ">
+                  </div>
+                  
+                  <div class="form-group full-width">
+                    <label>医院印 (角印) 設定</label>
+                    <div class="stamp-settings">
+                      <div class="stamp-type-toggle">
+                        <label class="radio-label">
+                          <input type="radio" name="stamp-type" value="auto" checked> 自動生成
+                        </label>
+                        <label class="radio-label">
+                          <input type="radio" name="stamp-type" value="upload"> 画像アップロード
+                        </label>
+                        <label class="radio-label">
+                          <input type="radio" name="stamp-type" value="none"> 表示なし
+                        </label>
+                      </div>
+                      
+                      <!-- 自動生成のテキスト設定 -->
+                      <div id="stamp-auto-settings" class="stamp-sub-settings">
+                        <label for="stamp-text">角印の文字 (通常4行以内)</label>
+                        <input type="text" id="stamp-text" value="あおぞら歯科クリニック印" placeholder="あおぞら歯科クリニック印">
+                      </div>
+
+                      <!-- アップロード用設定 -->
+                      <div id="stamp-upload-settings" class="stamp-sub-settings hidden">
+                        <input type="file" id="stamp-file" accept="image/*">
+                        <p class="help-text">背景が透過された正方形のPNG推奨</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group full-width text-right">
+                    <button type="button" id="btn-save-clinic" class="btn btn-primary btn-sm"><i data-lucide="save"></i> 設定を保存</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- 履歴一覧 -->
+            <section class="editor-section card" id="section-history">
+              <h2 class="section-title"><i data-lucide="history"></i> 保存・履歴一覧</h2>
+              <div class="history-controls">
+                <button type="button" id="btn-save-document" class="btn btn-success btn-block"><i data-lucide="save"></i> この書類を保存</button>
+              </div>
+              <div class="history-list-container">
+                <ul class="history-list" id="history-list">
+                  <!-- JavaScriptで動的生成 -->
+                  <li class="history-empty">履歴がありません</li>
+                </ul>
+              </div>
+            </section>
+          </div>
+
+        </div>
+      </main>
+
+      <!-- プレビューパネル（A4印刷プレビュー） -->
+      <main class="panel panel-preview" id="panel-preview">
+        <!-- 画面用の拡大縮小/用紙切り替えなどの操作バー（印刷時は非表示） -->
+        <div class="preview-toolbar no-print">
+          <div class="toolbar-info">
+            <i data-lucide="info"></i>
+            <span>この画面はA4印刷レイアウトのプレビューです。</span>
+          </div>
+          <div class="toolbar-actions">
+            <button type="button" id="btn-back-edit" class="btn btn-secondary"><i data-lucide="edit-3"></i> 編集に戻る</button>
+            <button type="button" id="btn-print-preview" class="btn btn-primary"><i data-lucide="printer"></i> 印刷する (PDF保存)</button>
+          </div>
+        </div>
+
+        <!-- A4縦 印刷用コンテナ -->
+        <div class="print-page-wrapper">
+          <div class="print-page" id="print-page">
+            <!-- 書類タイトル -->
+            <div class="print-header">
+              <h1 id="print-doc-title">請求書</h1>
+              <div class="print-doc-meta">
+                <div class="meta-row">
+                  <span class="meta-label">文書番号:</span>
+                  <span class="meta-val" id="print-doc-id">INV-20260826-001</span>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-label">発行日:</span>
+                  <span class="meta-val" id="print-issue-date">2026年08月26日</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 宛先 vs 送信元 (医院情報) -->
+            <div class="print-entities">
+              <!-- 宛先 -->
+              <div class="entity-client">
+                <div class="client-name-container">
+                  <span class="client-name" id="print-patient-name">山田 花子</span>
+                  <span class="client-suffix">様</span>
+                </div>
+                <div class="client-meta">
+                  <span class="meta-label">カルテNo:</span>
+                  <span class="meta-val" id="print-patient-id">0001234</span>
+                </div>
+                <p class="print-message" id="print-message">下記の通り、自費診療費をご請求申し上げます。</p>
+              </div>
+
+              <!-- 発行元 (医院情報) -->
+              <div class="entity-clinic">
+                <h3 class="clinic-name" id="print-clinic-name">あおぞら歯科クリニック</h3>
+                <p class="clinic-zip">〒<span id="print-clinic-zip">123-4567</span></p>
+                <p class="clinic-address" id="print-clinic-address">東京都港区南青山1-2-3</p>
+                <p class="clinic-tel">TEL: <span id="print-clinic-tel">03-1234-5678</span></p>
+                <p class="clinic-invoice">登録番号: <span id="print-clinic-invoice-no">T1234567890123</span></p>
+                
+                <!-- 医院印 (角印) -->
+                <div class="clinic-stamp-container">
+                  <div id="print-clinic-stamp" class="clinic-stamp">
+                    <!-- 自動生成 or 画像がJSで配置される -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 総請求額表示 -->
+            <div class="print-total-banner">
+              <div class="banner-title" id="print-banner-title">ご請求金額 (税込)</div>
+              <div class="banner-amount">
+                <span class="currency">¥</span>
+                <span class="amount" id="print-total-amount">1,100,000</span>
+              </div>
+              <div class="banner-sub-info" id="print-banner-sub-info">
+                <span>(うち既収金: ¥<span id="print-banner-deposit">0</span>)</span>
+                <span class="highlight-due">今回請求残額: ¥<span id="print-banner-due">1,100,000</span></span>
+              </div>
+            </div>
+
+            <!-- 支払期日 -->
+            <div class="print-due-date-row" id="print-due-date-container">
+              <span class="label">お支払期限:</span>
+              <span class="val" id="print-due-date">2026年09月09日</span>
+            </div>
+
+            <!-- 明細テーブル -->
+            <div class="print-table-container">
+              <table class="print-items-table">
+                <thead>
+                  <tr>
+                    <th width="5%">No</th>
+                    <th width="20%">診療区分 / 歯式</th>
+                    <th width="35%">診療内容 / 項目</th>
+                    <th width="15%">保証期間</th>
+                    <th width="8%" class="text-right">数量</th>
+                    <th width="17%" class="text-right" id="print-th-price-label">単価 (税込)</th>
+                    <th width="17%" class="text-right" id="print-th-amount-label">金額 (税込)</th>
+                  </tr>
+                </thead>
+                <tbody id="print-items-tbody">
+                  <!-- JSで動的生成 -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 計算内訳 & 特記事項 -->
+            <div class="print-summary-grid">
+              <!-- 左側：お支払い案内 & 注意事項 -->
+              <div class="summary-left">
+                <!-- 振込先銀行口座 -->
+                <div class="print-payment-bank" id="print-bank-container">
+                  <h4>【お振込先口座】</h4>
+                  <p id="print-bank-info">ひまわり銀行 本支店 普通 1234567<br>イリョウホウジン アオゾラシカ</p>
+                </div>
+                <!-- お支払い方法 -->
+                <div class="print-payment-methods">
+                  <h4>【お支払い方法のご案内】</h4>
+                  <p id="print-payment-methods-text">現金、クレジットカード、デンタルローン、銀行振込がご利用いただけます。</p>
+                </div>
+                <!-- 医療費控除等注意事項 -->
+                <div class="print-notes" id="print-notes-container">
+                  <h4>【特記事項】</h4>
+                  <p id="print-notes-text">※自費診療（自由診療）は医療費控除の対象となる場合がございます。領収書は大切に保管してください。再発行は致しかねます。</p>
+                </div>
+              </div>
+
+              <!-- 右側：消費税内訳 -->
+              <div class="summary-right">
+                <table class="print-calc-table">
+                  <tr id="print-row-items-sum">
+                    <th>明細合計 (<span id="print-items-sum-type">税込</span>)</th>
+                    <td id="print-items-sum">¥0</td>
+                  </tr>
+                  <tr id="print-row-discount" class="hidden">
+                    <th>値引き額</th>
+                    <td id="print-discount" class="text-danger">-¥0</td>
+                  </tr>
+                  <tr>
+                    <th>小計 (<span id="print-subtotal-type">税抜</span>)</th>
+                    <td id="print-subtotal">¥0</td>
+                  </tr>
+                  <tr>
+                    <th>課税対象額 (<span id="print-taxable-rate">10%</span>)</th>
+                    <td id="print-taxable">¥0</td>
+                  </tr>
+                  <tr>
+                    <th>消費税額 (<span id="print-tax-rate-percent">10%</span>)</th>
+                    <td id="print-tax-amount">¥0</td>
+                  </tr>
+                  <tr id="print-row-adjustment" class="hidden">
+                    <th>端数調整額</th>
+                    <td id="print-adjustment">¥0</td>
+                  </tr>
+                  <tr class="total-row">
+                    <th>合計金額 (税込)</th>
+                    <td id="print-total">¥0</td>
+                  </tr>
+                  <tr>
+                    <th>既収金 (内金等)</th>
+                    <td id="print-deposit">¥0</td>
+                  </tr>
+                  <tr class="due-row">
+                    <th id="print-due-label">今回請求残額</th>
+                    <td id="print-due-amount-val">¥0</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <!-- ページフッター -->
+            <div class="print-footer">
+              <p>ご不明な点がございましたら、当院窓口またはお電話にてお気軽にお問い合わせください。</p>
+              <p class="thank-you">Thank you for choosing our clinic.</p>
+            </div>
+
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
