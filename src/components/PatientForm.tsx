@@ -56,42 +56,12 @@ export const PatientForm: React.FC<PatientFormProps> = ({
             className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-clinic-500 focus:border-clinic-500 bg-slate-50/50"
           />
         </div>
-        <div>
+        <div className="md:col-span-2">
           <label className="block text-xs font-semibold text-slate-500 mb-1">請求日 <span className="text-rose-500">*</span></label>
           <input
             type="date"
             value={patientInfo.invoiceDate}
             onChange={e => handleChange('invoiceDate', e.target.value)}
-            className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-clinic-500 focus:border-clinic-500 bg-slate-50/50"
-          />
-        </div>
-        <div>
-          <label className="block text-xs font-semibold text-slate-500 mb-1">医院名</label>
-          <input
-            type="text"
-            value={patientInfo.clinicName}
-            onChange={e => handleChange('clinicName', e.target.value)}
-            placeholder="みなと歯科クリニック"
-            className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-clinic-500 focus:border-clinic-500 bg-slate-50/50"
-          />
-        </div>
-        <div className="md:col-span-2">
-          <label className="block text-xs font-semibold text-slate-500 mb-1">医院住所</label>
-          <input
-            type="text"
-            value={patientInfo.clinicAddress}
-            onChange={e => handleChange('clinicAddress', e.target.value)}
-            placeholder="住所を入力してください"
-            className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-clinic-500 focus:border-clinic-500 bg-slate-50/50"
-          />
-        </div>
-        <div className="md:col-span-2">
-          <label className="block text-xs font-semibold text-slate-500 mb-1">電話番号</label>
-          <input
-            type="text"
-            value={patientInfo.clinicPhone}
-            onChange={e => handleChange('clinicPhone', e.target.value)}
-            placeholder="03-1234-5678"
             className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-clinic-500 focus:border-clinic-500 bg-slate-50/50"
           />
         </div>
