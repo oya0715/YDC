@@ -4,9 +4,16 @@ import { PatientInfo } from '../types';
 interface PatientFormProps {
   patientInfo: PatientInfo;
   onChange: (updatedInfo: PatientInfo) => void;
+  invoiceType: string;
+  onChangeInvoiceType: (type: string) => void;
 }
 
-export const PatientForm: React.FC<PatientFormProps> = ({ patientInfo, onChange }) => {
+export const PatientForm: React.FC<PatientFormProps> = ({
+  patientInfo,
+  onChange,
+  invoiceType,
+  onChangeInvoiceType,
+}) => {
   const handleChange = (field: keyof PatientInfo, value: string) => {
     onChange({
       ...patientInfo,
@@ -26,6 +33,19 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patientInfo, onChange 
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="md:col-span-2">
+          <label className="block text-xs font-semibold text-slate-500 mb-1">請求書タイプ <span className="text-rose-500">*</span></label>
+          <select
+            value={invoiceType}
+            onChange={e => onChangeInvoiceType(e.target.value)}
+            className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-clinic-500 bg-white font-semibold text-slate-700"
+          >
+            <option value="implant">インプラント用請求書 (10年保証)</option>
+            <option value="prostho">自費補綴用請求書 (5年保証・義歯除く)</option>
+            <option value="other">その他自費（矯正など）用請求書 (保証なし)</option>
+          </select>
+        </div>
+
         <div>
           <label className="block text-xs font-semibold text-slate-500 mb-1">患者氏名 <span className="text-rose-500">*</span></label>
           <input
