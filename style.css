@@ -1,0 +1,1372 @@
+/* ==========================================================================
+   自費診療 請求書・見積書作成システム スタイルシート (style.css)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. 変数 & 基本設定
+   -------------------------------------------------------------------------- */
+:root {
+  --primary-color: #0077c2;
+  --primary-hover: #005ea2;
+  --primary-light: #e8f4fd;
+  --primary-soft: #f0f7fc;
+  
+  --secondary-color: #5c7285;
+  --secondary-hover: #485c6d;
+  --secondary-light: #f0f3f6;
+
+  --success-color: #2e7d32;
+  --success-hover: #1b5e20;
+  --success-light: #e8f5e9;
+
+  --danger-color: #d32f2f;
+  --danger-hover: #c62828;
+  --danger-light: #ffebee;
+
+  --dark-color: #2c3e50;
+  --light-color: #ffffff;
+  --bg-color: #f4f7f9;
+  --border-color: #dce3e9;
+  --text-muted: #7f8c8d;
+  
+  --font-sans: 'Inter', 'Noto Sans JP', sans-serif;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-color);
+  color: var(--dark-color);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --------------------------------------------------------------------------
+   2. レイアウト & グローバルコンポーネント
+   -------------------------------------------------------------------------- */
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* カードデザイン */
+.card {
+  background: var(--light-color);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
+  margin-bottom: 24px;
+  transition: box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* ボタン */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--light-color);
+}
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+  background-color: var(--secondary-light);
+  border-color: var(--border-color);
+  color: var(--dark-color);
+}
+.btn-secondary:hover {
+  background-color: var(--border-color);
+}
+
+.btn-success {
+  background-color: var(--success-color);
+  color: var(--light-color);
+}
+.btn-success:hover {
+  background-color: var(--success-hover);
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  color: var(--light-color);
+}
+.btn-danger:hover {
+  background-color: var(--danger-hover);
+}
+
+.btn-icon {
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--dark-color);
+  transition: all var(--transition-fast);
+}
+.btn-icon:hover {
+  background-color: var(--secondary-light);
+  border-color: var(--secondary-color);
+}
+
+.btn-block {
+  display: flex;
+  width: 100%;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.text-danger {
+  color: var(--danger-color) !important;
+}
+
+/* フォーム関連 */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dark-color);
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background-color: var(--light-color);
+  color: var(--dark-color);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 119, 194, 0.15);
+}
+
+.input-with-action {
+  display: flex;
+  gap: 8px;
+}
+
+.input-suffix {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.suffix-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--dark-color);
+}
+
+.input-currency {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.input-currency input {
+  padding-left: 24px;
+}
+
+.text-right {
+  text-align: right;
+}
+.text-center {
+  text-align: center;
+}
+.font-semibold {
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   3. アプリケーションヘッダー
+   -------------------------------------------------------------------------- */
+.app-header {
+  background: var(--light-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  color: var(--primary-color);
+  width: 28px;
+  height: 28px;
+}
+
+.header-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--dark-color);
+}
+
+.header-logo h1 span {
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* トグルグループ (ラジオボタンで作るスイッチ) */
+.toggle-group {
+  display: inline-flex;
+  background-color: var(--secondary-light);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.toggle-group input[type="radio"] {
+  display: none;
+}
+
+.toggle-group label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--secondary-color);
+  border-radius: calc(var(--radius-sm) - 2px);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.toggle-group input[type="radio"]:checked + label {
+  background-color: var(--light-color);
+  color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.mode-toggle {
+  background-color: var(--primary-light);
+  border-color: rgba(0, 119, 194, 0.15);
+}
+
+.mode-toggle label {
+  color: var(--primary-color);
+}
+
+.mode-toggle input[type="radio"]:checked + label {
+  background-color: var(--primary-color);
+  color: var(--light-color);
+  box-shadow: var(--shadow-sm);
+}
+
+/* --------------------------------------------------------------------------
+   4. 編集パネル (パネル制御)
+   -------------------------------------------------------------------------- */
+.panel {
+  display: none;
+  width: 100%;
+}
+
+/* アクティブなパネルを表示 */
+#app.show-edit .panel-edit {
+  display: block;
+}
+
+#app.show-preview .panel-preview {
+  display: block;
+}
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+}
+
+.editor-main-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-side-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--dark-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 2px solid var(--primary-light);
+  padding-bottom: 8px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-header .section-title {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.sub-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-color);
+  border-left: 3px solid var(--primary-color);
+  padding-left: 8px;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   5. 明細入力テーブル
+   -------------------------------------------------------------------------- */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+
+.items-table th,
+.items-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.items-table th {
+  background-color: var(--primary-soft);
+  font-weight: 600;
+  color: var(--dark-color);
+  white-space: nowrap;
+}
+
+.items-table tbody tr:hover {
+  background-color: var(--primary-soft);
+}
+
+.items-table input,
+.items-table select {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.row-actions {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.btn-row-move {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+}
+.btn-row-move:hover {
+  color: var(--primary-color);
+}
+
+.btn-row-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+}
+.btn-row-delete:hover {
+  color: var(--danger-color);
+}
+
+.table-footer-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* --------------------------------------------------------------------------
+   6. プリセット選択
+   -------------------------------------------------------------------------- */
+.presets-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.preset-btn {
+  background: var(--light-color);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+  color: var(--dark-color);
+}
+
+.preset-btn:hover {
+  background-color: var(--primary-light);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.preset-btn .price {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.preset-btn:hover .price {
+  color: var(--primary-color);
+}
+
+/* --------------------------------------------------------------------------
+   7. 計算グリッド
+   -------------------------------------------------------------------------- */
+.calculations-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 500px;
+  margin-left: auto;
+  border-top: 1px solid var(--border-color);
+  padding-top: 16px;
+}
+
+.calc-settings-row,
+.calc-inputs-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 8px;
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 12px;
+}
+
+.calc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.calc-label {
+  font-weight: 500;
+  color: var(--secondary-color);
+}
+
+.calc-val {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.calc-row.highlight {
+  background-color: var(--primary-light);
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  border-left: 4px solid var(--primary-color);
+}
+
+.calc-row.highlight .calc-label {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.calc-row.highlight .calc-val {
+  color: var(--primary-color);
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.calc-row.payment-input {
+  border-top: 1px dashed var(--border-color);
+  padding-top: 12px;
+}
+
+.calc-row.payment-input input {
+  max-width: 150px;
+}
+
+.calc-row.highlight-danger {
+  background-color: var(--danger-light);
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  border-left: 4px solid var(--danger-color);
+}
+
+.calc-row.highlight-danger .calc-label {
+  color: var(--danger-color);
+  font-weight: 700;
+}
+
+.calc-row.highlight-danger .calc-val {
+  color: var(--danger-color);
+  font-weight: 700;
+  font-size: 20px;
+}
+
+/* --------------------------------------------------------------------------
+   8. アコーディオン設定 (医院設定)
+   -------------------------------------------------------------------------- */
+.editor-section.collapsed .collapsible-content {
+  display: none;
+}
+
+.editor-section.collapsed .toggle-icon {
+  transform: rotate(0deg);
+}
+
+.editor-section .toggle-icon {
+  transform: rotate(180deg);
+  transition: transform var(--transition-fast);
+}
+
+.section-header.clickable {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header.clickable h2 {
+  margin-bottom: 0;
+}
+
+/* 印鑑(角印)設定のスタイル */
+.stamp-settings {
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.stamp-type-toggle {
+  display: flex;
+  gap: 12px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.stamp-sub-settings {
+  border-top: 1px dashed var(--border-color);
+  padding-top: 10px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.help-text {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   9. 履歴リスト
+   -------------------------------------------------------------------------- */
+.history-controls {
+  margin-bottom: 16px;
+}
+
+.history-list-container {
+  max-height: 350px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.history-list {
+  list-style: none;
+}
+
+.history-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color var(--transition-fast);
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-item:hover {
+  background-color: var(--primary-soft);
+}
+
+.history-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.history-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dark-color);
+}
+
+.history-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  gap: 8px;
+}
+
+.history-amount {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.history-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: 12px;
+}
+
+.history-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 4px;
+  border-radius: 4px;
+  display: inline-flex;
+}
+
+.history-actions button:hover {
+  background-color: var(--border-color);
+}
+
+.history-actions .btn-clone:hover {
+  color: var(--success-color);
+}
+
+.history-actions .btn-delete:hover {
+  color: var(--danger-color);
+}
+
+.history-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* --------------------------------------------------------------------------
+   10. A4印刷プレビュー (画面用)
+   -------------------------------------------------------------------------- */
+.panel-preview {
+  background-color: #525659; /* PDFビューアー風の背景色 */
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.preview-toolbar {
+  width: 100%;
+  max-width: 820px;
+  background-color: var(--light-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 12px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.toolbar-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--secondary-color);
+}
+
+.toolbar-info i {
+  color: var(--primary-color);
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* A4用紙再現スタイル */
+.print-page-wrapper {
+  perspective: 1000px;
+}
+
+.print-page {
+  background-color: var(--light-color);
+  width: 210mm;
+  min-height: 297mm;
+  padding: 20mm 15mm 15mm 15mm;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  color: #333333;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   11. A4印刷プレビュー内要素 (実書類レイアウト)
+   -------------------------------------------------------------------------- */
+
+/* 印刷用ヘッダー */
+.print-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 3px double #333;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.print-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #111;
+  margin: 0;
+}
+
+.print-doc-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.print-doc-meta .meta-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.print-doc-meta .meta-label {
+  color: #666;
+}
+
+.print-doc-meta .meta-val {
+  font-weight: 600;
+}
+
+/* 宛先・医院情報エリア */
+.print-entities {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.entity-client {
+  display: flex;
+  flex-direction: column;
+}
+
+.client-name-container {
+  border-bottom: 1px solid #333;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.client-name {
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.client-suffix {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.client-meta {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.print-message {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* 医院情報・発行元 */
+.entity-clinic {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+  padding-right: 70px; /* 角印用の余白 */
+}
+
+.clinic-name {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #111;
+}
+
+.clinic-address {
+  line-height: 1.4;
+}
+
+.clinic-invoice {
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* 角印 */
+.clinic-stamp-container {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clinic-stamp {
+  width: 60px;
+  height: 60px;
+  position: relative;
+}
+
+.clinic-stamp img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.85;
+}
+
+/* 自動生成角印スタイル */
+.auto-stamp {
+  width: 60px;
+  height: 60px;
+  border: 2px solid var(--danger-color);
+  color: var(--danger-color);
+  font-family: "MS Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 11px;
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4px;
+  font-weight: 700;
+  border-radius: 4px;
+  letter-spacing: 0.1em;
+  user-select: none;
+  opacity: 0.85;
+  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.4);
+  /* 縦書きに設定 */
+  writing-mode: vertical-rl;
+  text-combine-upright: digits 2;
+}
+
+/* 総請求額バナー */
+.print-total-banner {
+  background-color: #f0f7fc;
+  border-top: 2px solid var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* 印刷用CSSで黒背景等にならないよう淡いグレー線にする */
+.print-total-banner {
+  border-top: 2px solid #333;
+  border-bottom: 2px solid #333;
+  background-color: #fafafa;
+}
+
+.banner-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #333;
+}
+
+.banner-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.banner-amount .currency {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.banner-amount .amount {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.banner-sub-info {
+  font-size: 11px;
+  color: #555;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.highlight-due {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--danger-color);
+}
+
+.print-due-date-row {
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  padding-left: 6px;
+}
+
+.print-due-date-row .label {
+  font-weight: 700;
+  color: #555;
+}
+
+.print-due-date-row .val {
+  font-weight: 700;
+  border-bottom: 1px solid #333;
+  padding-bottom: 2px;
+  min-width: 140px;
+}
+
+/* 印刷明細テーブル */
+.print-table-container {
+  margin-bottom: 20px;
+  flex: 1; /* 余白を埋めるためにテーブルを伸縮 */
+}
+
+.print-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.print-items-table th,
+.print-items-table td {
+  border: 1px solid #999;
+  padding: 8px 10px;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
+.print-items-table th {
+  background-color: #f2f2f2;
+  font-weight: 700;
+  text-align: center;
+  color: #111;
+}
+
+.print-items-table td.text-right {
+  text-align: right;
+}
+
+/* 計算内訳 & 特記事項グリッド */
+.print-summary-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 30px;
+  margin-top: auto; /* 常にページ下部に寄せる */
+  border-top: 1px solid #ddd;
+  padding-top: 15px;
+}
+
+.summary-left {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 11px;
+}
+
+.summary-left h4 {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #333;
+  border-left: 2px solid #555;
+  padding-left: 6px;
+}
+
+.summary-left p {
+  color: #444;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.summary-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.print-calc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.print-calc-table th,
+.print-calc-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.print-calc-table th {
+  text-align: left;
+  font-weight: 500;
+  color: #555;
+}
+
+.print-calc-table td {
+  text-align: right;
+  font-weight: 600;
+  color: #222;
+}
+
+.print-calc-table tr.total-row th,
+.print-calc-table tr.total-row td {
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+  background-color: #fafafa;
+}
+
+.print-calc-table tr.total-row th {
+  font-weight: 700;
+  color: #111;
+  font-size: 12px;
+}
+
+.print-calc-table tr.total-row td {
+  font-weight: 700;
+  color: #111;
+  font-size: 13px;
+}
+
+.print-calc-table tr.due-row th,
+.print-calc-table tr.due-row td {
+  border-top: 2px double #333;
+  border-bottom: 2px solid #333;
+  background-color: #fff9f9;
+}
+
+.print-calc-table tr.due-row th {
+  font-weight: 700;
+  color: var(--danger-color);
+  font-size: 12px;
+}
+
+.print-calc-table tr.due-row td {
+  font-weight: 700;
+  color: var(--danger-color);
+  font-size: 14px;
+}
+
+/* ページフッター */
+.print-footer {
+  margin-top: 25px;
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+  text-align: center;
+  font-size: 10px;
+  color: #777;
+}
+
+.print-footer .thank-you {
+  font-style: italic;
+  font-family: 'Inter', sans-serif;
+  margin-top: 4px;
+  color: #999;
+}
+
+/* --------------------------------------------------------------------------
+   12. メディアクエリ（画面レスポンシブ）
+   -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .editor-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+  }
+  .header-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+  .toggle-group, .btn {
+    flex: 1;
+    min-width: 120px;
+  }
+  .app-container {
+    padding: 12px;
+  }
+  .card {
+    padding: 16px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   13. 印刷用の設定（@media print）
+   -------------------------------------------------------------------------- */
+@media print {
+  /* ブラウザのヘッダー・フッターや余分な背景を隠す */
+  html, body {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 210mm;
+    height: 297mm;
+  }
+
+  #app {
+    display: block;
+    min-height: auto;
+  }
+
+  .app-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    display: block !important;
+  }
+
+  /* 印刷対象外の要素を全て非表示に */
+  .no-print {
+    display: none !important;
+  }
+
+  /* プレビューパネルのみ表示 */
+  #app.show-edit .panel-preview {
+    display: none !important;
+  }
+  
+  .panel-preview {
+    display: block !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 210mm;
+    min-height: 297mm;
+  }
+
+  .print-page-wrapper {
+    perspective: none;
+    width: 210mm;
+    height: 297mm;
+  }
+
+  .print-page {
+    box-shadow: none !important;
+    padding: 15mm 15mm 15mm 15mm !important; /* 周辺マージンの微調整 */
+    margin: 0 !important;
+    width: 210mm;
+    height: 297mm;
+    box-sizing: border-box;
+    page-break-after: avoid;
+    page-break-inside: avoid;
+  }
+  
+  /* 印刷に適した白黒/グレースケールベースの境界線 */
+  .print-items-table th {
+    background-color: #f2f2f2 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .print-total-banner {
+    background-color: #fafafa !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .print-calc-table tr.total-row th,
+  .print-calc-table tr.total-row td {
+    background-color: #fafafa !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .print-calc-table tr.due-row th,
+  .print-calc-table tr.due-row td {
+    background-color: #fff9f9 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .auto-stamp {
+    background-color: transparent !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
