@@ -34,11 +34,7 @@ export const InvoiceHeader: React.FC<InvoiceHeaderProps> = ({ patientInfo }) => 
         <p className="text-xs text-slate-500 font-semibold">請求日: {formattedDate}</p>
         
         <div className="text-right mt-1">
-          <p className="text-sm font-bold text-slate-800">{patientInfo.clinicName || "みなと歯科クリニック"}</p>
-          <p className="text-[10px] text-slate-400 font-medium max-w-[200px] leading-relaxed whitespace-pre-wrap">{patientInfo.clinicAddress}</p>
-          {patientInfo.clinicPhone && (
-            <p className="text-[10px] text-slate-400 font-medium mt-0.5">TEL: {patientInfo.clinicPhone}</p>
-          )}
+          <p className="text-sm font-bold text-slate-800">やまもと歯科</p>
         </div>
       </div>
     </div>
