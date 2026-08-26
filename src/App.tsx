@@ -38,7 +38,16 @@ function App() {
 
   const [items, setItems] = useState<TreatmentItem[]>(() => {
     const saved = localStorage.getItem('ydc_items');
-    return saved ? JSON.parse(saved) : initialItems;
+    if (saved) {
+      const parsed = JSON.parse(saved) as TreatmentItem[];
+      return parsed.map(item => {
+        if (item.note === "右下奥歯" || item.note === "ホームホワイトニング" || item.note === "定期健診・PMTC") {
+          return { ...item, note: "" };
+        }
+        return item;
+      });
+    }
+    return initialItems;
   });
 
   const [discount, setDiscount] = useState<number>(() => {
