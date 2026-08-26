@@ -46,7 +46,7 @@ export const InvoicePreview: React.FC<InvoicePreviewProps> = ({
 
         {/* Message/Intro */}
         <p className="text-xs text-slate-600 leading-relaxed">
-          毎度ありがとうございます。下記の通りご請求申し上げます。
+          {patientInfo.name}様の自費診療費の金額及び内訳は、下記のようになっております。　お手数ですが、振り込みもしくは受付にてご精算くださいますよう、よろしくお願い申し上げます。
         </p>
 
         {/* Details Table */}
