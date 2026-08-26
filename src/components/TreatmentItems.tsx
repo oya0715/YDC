@@ -72,6 +72,114 @@ const PRESETS = [
   { category: "その他", name: "その他", price: 0 }
 ];
 
+const shouldShowToothSelector = (itemName: string) => {
+  const preset = PRESETS.find(p => p.name === itemName);
+  if (!preset) return true;
+  return ['補綴', 'インプラント', 'その他', 'DEN'].includes(preset.category);
+};
+
+interface ToothSelectorProps {
+  note: string;
+  onChange: (newNote: string) => void;
+}
+
+const ToothSelector: React.FC<ToothSelectorProps> = ({ note, onChange }) => {
+  const selectedTeeth = note ? note.split(', ') : [];
+  
+  const toothOrder = [
+    '右上8','右上7','右上6','右上5','右上4','右上3','右上2','右上1',
+    '左上1','左上2','左上3','左上4','左上5','左上6','左上7','左上8',
+    '右下8','右下7','右下6','右下5','右下4','右下3','右下2','右下1',
+    '左下1','左下2','左下3','左下4','左下5','左下6','左下7','左下8'
+  ];
+
+  const handleToggleTooth = (toothId: string) => {
+    let next = [...selectedTeeth];
+    const idx = next.indexOf(toothId);
+    if (idx > -1) {
+      next.splice(idx, 1);
+    } else {
+      next.push(toothId);
+    }
+    next.sort((a, b) => toothOrder.indexOf(a) - toothOrder.indexOf(b));
+    onChange(next.join(', '));
+  };
+
+  const handleClear = () => {
+    onChange('');
+  };
+
+  const renderToothButton = (toothId: string, label: number) => {
+    const isSelected = selectedTeeth.includes(toothId);
+    return (
+      <button
+        type="button"
+        key={toothId}
+        onClick={() => handleToggleTooth(toothId)}
+        className={`w-6 h-6 text-[10px] rounded border flex items-center justify-center transition-all cursor-pointer ${
+          isSelected
+            ? 'bg-clinic-500 text-white border-clinic-600 shadow-sm font-bold scale-105'
+            : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-slate-800'
+        }`}
+      >
+        {label}
+      </button>
+    );
+  };
+
+  return (
+    <div className="sm:col-span-12 mt-2 bg-slate-50 border border-slate-200/60 p-3 rounded-xl">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs font-bold text-slate-600">歯の部位を選択 (複数選択可)</span>
+        <button
+          onClick={handleClear}
+          type="button"
+          className="text-[10px] font-semibold text-slate-500 hover:text-rose-500 transition-colors"
+        >
+          選択をクリア
+        </button>
+      </div>
+
+      <div className="overflow-x-auto w-full">
+        <div className="flex flex-col items-center gap-1.5 font-mono text-xs select-none min-w-[360px] py-1">
+          {/* Upper Row */}
+          <div className="flex items-center gap-1">
+            <div className="flex items-center gap-0.5">
+              <span className="text-[9px] font-bold text-slate-400 mr-1.5 self-center">右上</span>
+              {[8, 7, 6, 5, 4, 3, 2, 1].map(num => renderToothButton(`右上${num}`, num))}
+            </div>
+            <div className="w-px h-6 bg-slate-300 mx-2"></div>
+            <div className="flex items-center gap-0.5">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map(num => renderToothButton(`左上${num}`, num))}
+              <span className="text-[9px] font-bold text-slate-400 ml-1.5 self-center">左上</span>
+            </div>
+          </div>
+
+          <div className="w-full border-t border-dashed border-slate-200 my-0.5"></div>
+
+          {/* Lower Row */}
+          <div className="flex items-center gap-1">
+            <div className="flex items-center gap-0.5">
+              <span className="text-[9px] font-bold text-slate-400 mr-1.5 self-center">右下</span>
+              {[8, 7, 6, 5, 4, 3, 2, 1].map(num => renderToothButton(`右下${num}`, num))}
+            </div>
+            <div className="w-px h-6 bg-slate-300 mx-2"></div>
+            <div className="flex items-center gap-0.5">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map(num => renderToothButton(`左下${num}`, num))}
+              <span className="text-[9px] font-bold text-slate-400 ml-1.5 self-center">左下</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-2 text-[10px] text-slate-500 font-semibold flex items-center gap-1.5">
+        <span className="bg-slate-200 px-1.5 py-0.5 rounded text-slate-600">選択中</span>
+        <span className="text-slate-700">{note || 'なし'}</span>
+      </div>
+    </div>
+  );
+};
+
 export const TreatmentItems: React.FC<TreatmentItemsProps> = ({ items, onChange }) => {
   const handleAddItem = () => {
     const newItem: TreatmentItem = {
@@ -154,7 +262,7 @@ export const TreatmentItems: React.FC<TreatmentItemsProps> = ({ items, onChange 
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 pr-8">
               
               {/* Selector/Input Name */}
-              <div className="sm:col-span-6">
+              <div className="sm:col-span-5">
                 <label className="block text-xs font-semibold text-slate-500 mb-1">診療項目名 <span className="text-rose-500">*</span></label>
                 <div className="flex gap-2">
                   <select
@@ -181,7 +289,7 @@ export const TreatmentItems: React.FC<TreatmentItemsProps> = ({ items, onChange 
               </div>
 
               {/* Unit Price */}
-              <div className="sm:col-span-4">
+              <div className="sm:col-span-3">
                 <label className="block text-xs font-semibold text-slate-500 mb-1">単価 (円) <span className="text-rose-500">*</span></label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">¥</span>
@@ -209,23 +317,19 @@ export const TreatmentItems: React.FC<TreatmentItemsProps> = ({ items, onChange 
                 />
               </div>
 
-              {/* Note/Remarks */}
-              <div className="sm:col-span-8">
-                <label className="block text-xs font-semibold text-slate-500 mb-1">備考</label>
-                <input
-                  type="text"
-                  value={item.note}
-                  onChange={e => handleUpdateItem(item.id, { note: e.target.value })}
-                  placeholder="例: 上顎前歯、右奥歯など (請求書に表示)"
-                  className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-clinic-500 focus:border-clinic-500"
-                />
-              </div>
-
               {/* Item Total Amount */}
-              <div className="sm:col-span-4 flex flex-col justify-end text-right">
+              <div className="sm:col-span-2 flex flex-col justify-end text-right">
                 <span className="text-xs text-slate-400 font-semibold mb-1">金額</span>
                 <span className="text-base font-bold text-slate-700 py-1">{formatYen(item.unitPrice * item.quantity)}</span>
               </div>
+
+              {/* Tooth Selector */}
+              {shouldShowToothSelector(item.name) && (
+                <ToothSelector
+                  note={item.note}
+                  onChange={(newNote) => handleUpdateItem(item.id, { note: newNote })}
+                />
+              )}
 
             </div>
           </div>
