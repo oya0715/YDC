@@ -86,9 +86,9 @@ export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
 
       {/* Payment and Bank Account Details (Common for all) */}
       <div className="mt-6 border-t border-slate-100 pt-4 text-[10px] space-y-3">
-        <div className="flex flex-col sm:flex-row justify-between gap-2 text-slate-600 font-medium">
+        <div className="space-y-1 text-slate-600 font-medium">
           <p>支払い方法：現金受付払い・振込（三井住友銀行／兵庫信用金庫）・デンタルローン</p>
-          <p className="sm:text-right">支払い期日：（　　　　　　　　　　　　　　　　　）</p>
+          <p>支払い期日：（　　　　　　　　　　　　　　　　　）</p>
         </div>
         
         <p className="text-[9px] text-slate-500 mt-1 font-semibold">お振込みの際は下記口座へお願い致します。</p>
