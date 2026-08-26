@@ -852,21 +852,12 @@
           <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 pr-8">
             <div class="sm:col-span-5">
               <label class="block text-xs font-semibold text-slate-500 mb-1">診療項目名 <span class="text-rose-500">*</span></label>
-              <div class="flex gap-2">
-                <select
-                  onchange="updateItemPreset('${item.id}', this.value)"
-                  class="w-1/2 px-3 py-1.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-clinic-500"
-                >
-                  ${presetOptions}
-                </select>
-                <input
-                  type="text"
-                  value="${item.name}"
-                  oninput="updateItemField('${item.id}', 'name', this.value)"
-                  placeholder="治療内容を入力"
-                  class="w-1/2 px-3 py-1.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-clinic-500"
-                />
-              </div>
+              <select
+                onchange="updateItemPreset('${item.id}', this.value)"
+                class="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-clinic-500 font-semibold text-slate-700"
+              >
+                ${presetOptions}
+              </select>
             </div>
 
             <div class="sm:col-span-3">
