@@ -7,12 +7,69 @@ interface TreatmentItemsProps {
 }
 
 const PRESETS = [
-  { name: "セラミッククラウン", price: 100000 },
-  { name: "ホワイトニング", price: 30000 },
-  { name: "インプラント", price: 350000 },
-  { name: "矯正治療", price: 800000 },
-  { name: "メンテナンス", price: 5000 },
-  { name: "その他", price: 0 }
+  // 補綴
+  { category: "補綴", name: "ハイブリッドIn", price: 30000 },
+  { category: "補綴", name: "セラミックIn／ジルコニアIn", price: 50000 },
+  { category: "補綴", name: "フルジルコニアcr", price: 100000 },
+  { category: "補綴", name: "オールセラミック", price: 120000 },
+  { category: "補綴", name: "ジルコニアセラミック", price: 140000 },
+  { category: "補綴", name: "MB", price: 80000 },
+  { category: "補綴", name: "ラミネートベニア", price: 100000 },
+  
+  // ホワイトニング
+  { category: "ホワイトニング", name: "ホームホワイトニング", price: 23000 },
+  { category: "ホワイトニング", name: "ジェル追加", price: 3000 },
+  { category: "ホワイトニング", name: "オフィスホワイトニング", price: 20000 },
+  { category: "ホワイトニング", name: "デュアルホワイトニング", price: 53000 },
+  { category: "ホワイトニング", name: "ウォーキングブリーチ", price: 10000 },
+  { category: "ホワイトニング", name: "GAMピーリング", price: 6000 },
+  
+  // インプラント
+  { category: "インプラント", name: "フィクスチャー", price: 300000 },
+  { category: "インプラント", name: "上部構造", price: 100000 },
+  { category: "インプラント", name: "GBR", price: 50000 },
+  { category: "インプラント", name: "ソケットリフト", price: 100000 },
+  { category: "インプラント", name: "サイナスリフト", price: 200000 },
+  { category: "インプラント", name: "プロビ", price: 10000 },
+  { category: "インプラント", name: "フレーム", price: 100000 },
+  { category: "インプラント", name: "ガイド", price: 100000 },
+  { category: "インプラント", name: "内冠", price: 100000 },
+  { category: "インプラント", name: "ロケーター", price: 80000 },
+  { category: "インプラント", name: "コバルト床（インプラント）", price: 200000 },
+  { category: "インプラント", name: "チタン床（インプラント）", price: 300000 },
+
+  // DEN
+  { category: "DEN", name: "ノンクラスプ（1本）", price: 80000 },
+  { category: "DEN", name: "ノンクラスプ（2本）", price: 100000 },
+  { category: "DEN", name: "ノンクラスプ（両側full）", price: 200000 },
+  { category: "DEN", name: "コバルト床（片面）", price: 200000 },
+  { category: "DEN", name: "チタン床（片面）", price: 300000 },
+  
+  // 矯正
+  { category: "矯正", name: "インビザ拡大床", price: 250000 },
+  { category: "矯正", name: "ハイラックス", price: 200000 },
+  { category: "矯正", name: "リンガルアーチ", price: 150000 },
+  { category: "矯正", name: "フェイスマスク", price: 18000 },
+  { category: "矯正", name: "プレオルソ", price: 50000 },
+  { category: "矯正", name: "バンドループ", price: 50000 },
+  { category: "矯正", name: "2by4 (片顎)", price: 100000 },
+  { category: "矯正", name: "3by6 (片顎)", price: 150000 },
+  { category: "矯正", name: "ブラケット1つ", price: 25000 },
+  { category: "矯正", name: "ワイヤー矯正", price: 890000 },
+  { category: "矯正", name: "インビザ", price: 890000 },
+  { category: "矯正", name: "インビザ（ファースト）", price: 600000 },
+  { category: "矯正", name: "アンカー1本", price: 30000 },
+  { category: "矯正", name: "シュミレーション", price: 30000 },
+  { category: "矯正", name: "片顎矯正", price: 450000 },
+  { category: "矯正", name: "前歯矯正", price: 300000 },
+  
+  // その他
+  { category: "その他", name: "ボツリヌス", price: 30000 },
+  { category: "その他", name: "レングス", price: 50000 },
+  { category: "その他", name: "IP full 自費BP", price: 9000 },
+  { category: "その他", name: "半年以内BP再製", price: 15000 },
+  { category: "その他", name: "自費メンテ", price: 3000 },
+  { category: "その他", name: "その他", price: 0 }
 ];
 
 export const TreatmentItems: React.FC<TreatmentItemsProps> = ({ items, onChange }) => {
@@ -55,6 +112,8 @@ export const TreatmentItems: React.FC<TreatmentItemsProps> = ({ items, onChange 
     return `¥${amount.toLocaleString('ja-JP')}`;
   };
 
+  const categories = Array.from(new Set(PRESETS.map(p => p.category)));
+
   return (
     <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-4">
       <div className="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -70,7 +129,7 @@ export const TreatmentItems: React.FC<TreatmentItemsProps> = ({ items, onChange 
           onClick={handleAddItem}
           className="inline-flex items-center px-3 py-1.5 text-xs font-bold rounded-lg text-clinic-600 bg-clinic-50 hover:bg-clinic-100 active:bg-clinic-200 transition-all gap-1"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="w-3.5 h-3.5">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" className="w-3.5 h-3.5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
           ＋項目を追加
@@ -87,7 +146,7 @@ export const TreatmentItems: React.FC<TreatmentItemsProps> = ({ items, onChange 
               className="absolute top-3 right-3 text-slate-400 hover:text-rose-500 p-1.5 rounded-lg hover:bg-rose-50 transition-colors"
               title="この項目を削除"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="w-4 h-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" className="w-4 h-4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
               </svg>
             </button>
@@ -101,10 +160,14 @@ export const TreatmentItems: React.FC<TreatmentItemsProps> = ({ items, onChange 
                   <select
                     value={PRESETS.some(p => p.name === item.name) ? item.name : "その他"}
                     onChange={e => handleUpdateItem(item.id, { name: e.target.value })}
-                    className="w-1/2 px-3 py-1.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-clinic-500 focus:border-clinic-500"
+                    className="w-1/2 px-3 py-1.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-clinic-500"
                   >
-                    {PRESETS.map(preset => (
-                      <option key={preset.name} value={preset.name}>{preset.name}</option>
+                    {categories.map(cat => (
+                      <optgroup key={cat} label={cat}>
+                        {PRESETS.filter(p => p.category === cat).map(preset => (
+                          <option key={preset.name} value={preset.name}>{preset.name}</option>
+                        ))}
+                      </optgroup>
                     ))}
                   </select>
                   <input
