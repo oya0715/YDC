@@ -10,6 +10,7 @@ interface InvoiceFooterProps {
   totalAmount: number;
   paidAmount: number;
   unpaidAmount: number;
+  invoiceType: string;
 }
 
 export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
@@ -22,6 +23,7 @@ export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
   totalAmount,
   paidAmount,
   unpaidAmount,
+  invoiceType,
 }) => {
   const formatYen = (amount: number) => {
     return `¥${amount.toLocaleString('ja-JP')}`;
@@ -61,7 +63,7 @@ export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
 
         {/* Total Amount (Highlight 1) */}
         <div className="flex justify-between items-center bg-slate-50 px-3.5 py-3 rounded-xl border border-slate-100 mt-2">
-          <span class="text-sm font-bold text-slate-600">請求合計金額（税込）</span>
+          <span className="text-sm font-bold text-slate-600">請求合計金額（税込）</span>
           <span className="text-lg font-black text-slate-800 tracking-wide">{formatYen(totalAmount)}</span>
         </div>
 
@@ -82,15 +84,92 @@ export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
         </div>
       </div>
 
-      {/* Footer notes */}
-      <div className="mt-8 pt-4 border-t border-slate-100 text-[10px] text-slate-400 space-y-1">
-        <p className="font-medium text-slate-500">【備考】</p>
-        <p className="leading-relaxed">
-          ・本請求書は自費診療（保険外診療）に関する請求書です。保険診療の領収書とは別扱いとなります。
-        </p>
-        <p className="leading-relaxed">
-          ・ご不明な点がございましたら、当院受付窓口までお気軽にお問い合わせください。
-        </p>
+      {/* Payment and Bank Account Details (Common for all) */}
+      <div className="mt-6 border-t border-slate-100 pt-4 text-[10px] space-y-3">
+        <div className="flex flex-col sm:flex-row justify-between gap-2 text-slate-600 font-medium">
+          <p>支払い方法：現金受付払い・振込（三井住友銀行／兵庫信用金庫）・デンタルローン</p>
+          <p className="sm:text-right">支払い期日：（　　　　　　　　　　　　　　　　　）</p>
+        </div>
+        
+        <p className="text-[9px] text-slate-500 mt-1 font-semibold">お振込みの際は下記口座へお願い致します。</p>
+        <div className="overflow-hidden border border-slate-200 rounded-lg">
+          <table className="min-w-full divide-y divide-slate-200 text-center">
+            <thead className="bg-slate-50">
+              <tr className="divide-x divide-slate-200">
+                <th className="px-2 py-1 font-bold text-slate-500">銀行名</th>
+                <td className="px-2 py-1 font-semibold text-slate-700">三井住友銀行</td>
+                <td className="px-2 py-1 font-semibold text-slate-700">兵庫信用金庫</td>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200">
+              <tr className="divide-x divide-slate-200">
+                <th className="px-2 py-1 font-bold text-slate-500 bg-slate-50/50">支店名</th>
+                <td className="px-2 py-1 text-slate-600">網干支店</td>
+                <td className="px-2 py-1 text-slate-600">御津支店</td>
+              </tr>
+              <tr className="divide-x divide-slate-200">
+                <th className="px-2 py-1 font-bold text-slate-500 bg-slate-50/50">口座種類</th>
+                <td className="px-2 py-1 text-slate-600">普通</td>
+                <td className="px-2 py-1 text-slate-600">普通</td>
+              </tr>
+              <tr className="divide-x divide-slate-200">
+                <th className="px-2 py-1 font-bold text-slate-500 bg-slate-50/50">口座番号</th>
+                <td className="px-2 py-1 font-bold text-slate-800">3215296</td>
+                <td className="px-2 py-1 font-bold text-slate-800">0179190</td>
+              </tr>
+              <tr className="divide-x divide-slate-200">
+                <th className="px-2 py-1 font-bold text-slate-500 bg-slate-50/50">名義人</th>
+                <td className="px-2 py-1 text-slate-600 tracking-wider">ヤマモト タカフミ</td>
+                <td className="px-2 py-1 text-slate-600 tracking-wider">ヤマモト タカフミ</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* Conditionally Render Guarantee Section */}
+        {invoiceType === 'implant' && (
+          <div className="mt-4 p-3 bg-teal-50/50 border border-teal-100 rounded-lg text-[9px] text-slate-600 leading-relaxed space-y-1">
+            <p className="font-bold text-teal-800">＜保証について＞</p>
+            <p>ガイドデント認定医療機関において、インプラント手術を受けられた患者さまの再手術および上部構造の修復についてはインプラント10年保証に基づいて保証させていただきます。</p>
+            <p className="font-semibold text-slate-700">※但し、当医院の指定する定期検診にすべて応じて頂いてる方にかぎります。</p>
+            <p>また、外傷・事故の場合は対象外とさせて頂きます。</p>
+          </div>
+        )}
+
+        {invoiceType === 'prostho' && (
+          <div className="mt-4 p-3 bg-teal-50/50 border border-teal-100 rounded-lg text-[9px] text-slate-600 leading-relaxed space-y-1">
+            <p className="font-bold text-teal-800">＜保証について＞</p>
+            <p>3年以内は当医院がすべて負担いたします。3年以降は、下記の割合でご負担いただきます。</p>
+            <div className="pl-4 space-y-0.5">
+              <p>・3年以降4年未満：患者さん負担5割</p>
+              <p>・4年以降5年未満：患者さん負担6割</p>
+              <p>・5年以降6年未満：患者さん負担7割</p>
+            </div>
+            <p className="font-semibold text-slate-700">※但し、当医院の指定する定期検診にすべて応じて頂いてる方にかぎります。</p>
+            <p>また、外傷・事故の場合は対象外とさせて頂きます。</p>
+          </div>
+        )}
+
+        {/* Signatures block */}
+        <div className="mt-5 pt-3 border-t border-slate-100 flex flex-col items-end space-y-3 text-slate-700">
+          <div className="w-full text-left font-medium text-[9px] text-slate-400">
+            上記の内容について説明をうけ了承した。
+          </div>
+          <div className="flex flex-col gap-2 w-full max-w-[280px] self-end pt-1">
+            <div className="flex justify-between items-baseline border-b border-slate-300 pb-0.5">
+              <span className="font-semibold shrink-0">患者署名</span>
+              <span className="w-full"></span>
+            </div>
+            <div className="flex justify-between items-baseline border-b border-slate-300 pb-0.5">
+              <span className="font-semibold shrink-0">代理人署名</span>
+              <span className="w-full"></span>
+              <span className="font-medium text-[8px] shrink-0 text-slate-400">（続柄）______</span>
+            </div>
+          </div>
+          <div className="text-right text-[9px] text-slate-500 font-bold pt-0.5">
+            やまもと歯科
+          </div>
+        </div>
       </div>
     </div>
   );
