@@ -66,6 +66,11 @@ function App() {
     return saved ? Number(saved) : 0;
   });
 
+  const [invoiceType, setInvoiceType] = useState<string>(() => {
+    const saved = localStorage.getItem('ydc_invoice_type');
+    return saved || 'implant';
+  });
+
   const [validationError, setValidationError] = useState<string | null>(null);
 
   // Syncing states to localStorage
@@ -96,6 +101,10 @@ function App() {
   useEffect(() => {
     localStorage.setItem('ydc_paid', String(paidAmount));
   }, [paidAmount]);
+
+  useEffect(() => {
+    localStorage.setItem('ydc_invoice_type', invoiceType);
+  }, [invoiceType]);
 
   // Validation
   useEffect(() => {
@@ -148,6 +157,7 @@ function App() {
       setTaxRate(10);
       setIsTaxInclusive(false);
       setPaidAmount(0);
+      setInvoiceType('implant');
     }
   };
 
@@ -217,6 +227,8 @@ function App() {
           <PatientForm
             patientInfo={patientInfo}
             onChange={setPatientInfo}
+            invoiceType={invoiceType}
+            onChangeInvoiceType={setInvoiceType}
           />
 
           <TreatmentItems
@@ -253,6 +265,7 @@ function App() {
             totalAmount={totalAmount}
             paidAmount={paidAmount}
             unpaidAmount={unpaidAmount}
+            invoiceType={invoiceType}
           />
         </div>
 
