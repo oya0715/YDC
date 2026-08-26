@@ -24,9 +24,7 @@ const initialPatientInfo: PatientInfo = {
 };
 
 const initialItems: TreatmentItem[] = [
-  { id: "1", name: "セラミッククラウン", unitPrice: 100000, quantity: 1, note: "" },
-  { id: "2", name: "ホワイトニング", unitPrice: 30000, quantity: 1, note: "" },
-  { id: "3", name: "メンテナンス", unitPrice: 5000, quantity: 2, note: "" }
+  { id: "1", name: "フィクスチャー", unitPrice: 300000, quantity: 1, note: "" }
 ];
 
 function App() {
@@ -157,6 +155,29 @@ function App() {
   const unpaidAmount = Math.max(0, totalAmount - paidAmount);
 
   // 3. Handlers
+  const handleInvoiceTypeChange = (newType: string) => {
+    setInvoiceType(newType);
+    let defaultName = "その他";
+    let defaultPrice = 0;
+    if (newType === 'implant') {
+      defaultName = "フィクスチャー";
+      defaultPrice = 300000;
+    } else if (newType === 'prostho') {
+      defaultName = "ハイブリッドIn";
+      defaultPrice = 30000;
+    } else if (newType === 'other') {
+      defaultName = "ホームホワイトニング";
+      defaultPrice = 23000;
+    }
+    setItems([{
+      id: Date.now().toString(),
+      name: defaultName,
+      unitPrice: defaultPrice,
+      quantity: 1,
+      note: ""
+    }]);
+  };
+
   const handleReset = () => {
     if (confirm("入力データを初期値にリセットしますか？")) {
       setPatientInfo(initialPatientInfo);
@@ -237,12 +258,13 @@ function App() {
             patientInfo={patientInfo}
             onChange={setPatientInfo}
             invoiceType={invoiceType}
-            onChangeInvoiceType={setInvoiceType}
+            onChangeInvoiceType={handleInvoiceTypeChange}
           />
 
           <TreatmentItems
             items={items}
             onChange={setItems}
+            invoiceType={invoiceType}
           />
 
           <PriceSummary
