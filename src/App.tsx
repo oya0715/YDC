@@ -16,11 +16,11 @@ const getInitialDate = () => {
 
 const initialPatientInfo: PatientInfo = {
   name: "山田 太郎",
-  patientId: "10001",
+  patientId: "",
   invoiceDate: getInitialDate(),
-  clinicName: "みなと歯科クリニック",
-  clinicAddress: "東京都中央区晴海 1-2-3 晴海レジデンス 2F",
-  clinicPhone: "03-1234-5678"
+  clinicName: "やまもと歯科",
+  clinicAddress: "",
+  clinicPhone: ""
 };
 
 const initialItems: TreatmentItem[] = [
