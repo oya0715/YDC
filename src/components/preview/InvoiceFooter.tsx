@@ -41,7 +41,7 @@ export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
         {discount > 0 && (
           <div className="flex justify-between items-center text-xs text-slate-500 font-medium">
             <span>値引き</span>
-            <span className="font-semibold text-emerald-600">-{formatYen(discount)}</span>
+            <span className="font-semibold text-slate-700">-{formatYen(discount)}</span>
           </div>
         )}
 
@@ -55,7 +55,7 @@ export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
         {adjustment !== 0 && (
           <div className="flex justify-between items-center text-xs text-slate-500 font-medium">
             <span>端数調整額</span>
-            <span className={`font-semibold ${adjustment > 0 ? 'text-slate-700' : 'text-emerald-600'}`}>
+            <span className="font-semibold text-slate-700">
               {adjustment > 0 ? '+' : ''}{formatYen(adjustment)}
             </span>
           </div>
@@ -75,12 +75,12 @@ export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
         )}
 
         {/* Remaining Unpaid Amount (Highlight 2) */}
-        <div className="flex justify-between items-center bg-clinic-50 border border-clinic-100 px-3.5 py-3.5 rounded-xl mt-3">
+        <div className="flex justify-between items-center bg-slate-100 border border-slate-200 px-3.5 py-3.5 rounded-xl mt-3">
           <div className="flex flex-col">
-            <span className="text-xs font-bold text-clinic-700">今回ご請求金額</span>
-            <span className="text-[9px] text-clinic-500 font-medium mt-0.5">(合計金額 - 既収金)</span>
+            <span className="text-xs font-bold text-slate-700">今回ご請求金額</span>
+            <span className="text-[9px] text-slate-500 font-medium mt-0.5">(合計金額 - 既収金)</span>
           </div>
-          <span className="text-xl font-extrabold text-clinic-700 tracking-wide">{formatYen(unpaidAmount)}</span>
+          <span className="text-xl font-extrabold text-slate-800 tracking-wide">{formatYen(unpaidAmount)}</span>
         </div>
       </div>
 
@@ -128,8 +128,8 @@ export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
 
         {/* Conditionally Render Guarantee Section */}
         {invoiceType === 'implant' && (
-          <div className="mt-4 p-3 bg-teal-50/50 border border-teal-100 rounded-lg text-[9px] text-slate-600 leading-relaxed space-y-1">
-            <p className="font-bold text-teal-800">＜保証について＞</p>
+          <div className="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-lg text-[9px] text-slate-600 leading-relaxed space-y-1">
+            <p className="font-bold text-slate-800">＜保証について＞</p>
             <p>ガイドデント認定医療機関において、インプラント手術を受けられた患者さまの再手術および上部構造の修復についてはインプラント10年保証に基づいて保証させていただきます。</p>
             <p className="font-semibold text-slate-700">※但し、当医院の指定する定期検診にすべて応じて頂いてる方にかぎります。</p>
             <p>また、外傷・事故の場合は対象外とさせて頂きます。</p>
@@ -137,8 +137,8 @@ export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
         )}
 
         {invoiceType === 'prostho' && (
-          <div className="mt-4 p-3 bg-teal-50/50 border border-teal-100 rounded-lg text-[9px] text-slate-600 leading-relaxed space-y-1">
-            <p className="font-bold text-teal-800">＜保証について＞</p>
+          <div className="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-lg text-[9px] text-slate-600 leading-relaxed space-y-1">
+            <p className="font-bold text-slate-800">＜保証について＞</p>
             <p>3年以内は当医院がすべて負担いたします。3年以降は、下記の割合でご負担いただきます。</p>
             <div className="pl-4 space-y-0.5">
               <p>・3年以降4年未満：患者さん負担5割</p>
