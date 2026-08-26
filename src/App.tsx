@@ -24,9 +24,9 @@ const initialPatientInfo: PatientInfo = {
 };
 
 const initialItems: TreatmentItem[] = [
-  { id: "1", name: "セラミッククラウン", unitPrice: 100000, quantity: 1, note: "右下奥歯" },
-  { id: "2", name: "ホワイトニング", unitPrice: 30000, quantity: 1, note: "ホームホワイトニング" },
-  { id: "3", name: "メンテナンス", unitPrice: 5000, quantity: 2, note: "定期健診・PMTC" }
+  { id: "1", name: "セラミッククラウン", unitPrice: 100000, quantity: 1, note: "" },
+  { id: "2", name: "ホワイトニング", unitPrice: 30000, quantity: 1, note: "" },
+  { id: "3", name: "メンテナンス", unitPrice: 5000, quantity: 2, note: "" }
 ];
 
 function App() {
