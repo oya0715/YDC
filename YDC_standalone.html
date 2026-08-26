@@ -709,7 +709,14 @@
         const savedInvoiceType = localStorage.getItem('ydc_invoice_type');
 
         if (savedPatient) state.patientInfo = JSON.parse(savedPatient);
-        if (savedItems) state.items = JSON.parse(savedItems);
+        if (savedItems) {
+          state.items = JSON.parse(savedItems);
+          state.items.forEach(item => {
+            if (item.note === "右下奥歯" || item.note === "ホームホワイトニング" || item.note === "定期健診・PMTC") {
+              item.note = "";
+            }
+          });
+        }
         if (savedDiscount) state.discount = Number(savedDiscount);
         if (savedAdjustment) state.adjustment = Number(savedAdjustment);
         if (savedTaxRate) state.taxRate = Number(savedTaxRate);
