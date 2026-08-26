@@ -615,9 +615,7 @@
     };
 
     const initialItems = [
-      { id: "1", name: "セラミッククラウン", unitPrice: 100000, quantity: 1, note: "" },
-      { id: "2", name: "ホワイトニング", unitPrice: 30000, quantity: 1, note: "" },
-      { id: "3", name: "メンテナンス", unitPrice: 5000, quantity: 2, note: "" }
+      { id: "1", name: "フィクスチャー", unitPrice: 300000, quantity: 1, note: "" }
     ];
 
     const shouldShowToothSelector = (itemName) => {
@@ -835,11 +833,20 @@
         const row = document.createElement('div');
         row.className = "p-4 bg-slate-50/70 border border-slate-100 rounded-xl space-y-3 relative group";
         
-        // Group presets by category using optgroup tags
-        const categories = [...new Set(PRESETS.map(p => p.category))];
+        const filteredPresets = PRESETS.filter(p => {
+          if (state.invoiceType === 'implant') {
+            return p.category === 'インプラント';
+          }
+          if (state.invoiceType === 'prostho') {
+            return p.category === '補綴';
+          }
+          return p.category !== 'インプラント' && p.category !== '補綴';
+        });
+
+        const categories = [...new Set(filteredPresets.map(p => p.category))];
         const presetOptions = categories.map(cat => `
           <optgroup label="${cat}">
-            ${PRESETS.filter(p => p.category === cat).map(p => `
+            ${filteredPresets.filter(p => p.category === cat).map(p => `
               <option value="${p.name}" ${item.name === p.name ? 'selected' : ''}>${p.name}</option>
             `).join('')}
           </optgroup>
@@ -1122,6 +1129,28 @@
     // 7. Global Actions & Event Handlers
     window.updateInvoiceType = function(val) {
       state.invoiceType = val;
+      
+      let defaultName = "その他";
+      let defaultPrice = 0;
+      if (val === 'implant') {
+        defaultName = "フィクスチャー";
+        defaultPrice = 300000;
+      } else if (val === 'prostho') {
+        defaultName = "ハイブリッドIn";
+        defaultPrice = 30000;
+      } else if (val === 'other') {
+        defaultName = "ホームホワイトニング";
+        defaultPrice = 23000;
+      }
+      
+      state.items = [{
+        id: Date.now().toString(),
+        name: defaultName,
+        unitPrice: defaultPrice,
+        quantity: 1,
+        note: ""
+      }];
+      
       saveState();
       renderAll();
     };
@@ -1228,10 +1257,23 @@
 
     // Add item button
     document.getElementById('btn-add-item').addEventListener('click', () => {
+      let defaultName = "その他";
+      let defaultPrice = 0;
+      if (state.invoiceType === 'implant') {
+        defaultName = "フィクスチャー";
+        defaultPrice = 300000;
+      } else if (state.invoiceType === 'prostho') {
+        defaultName = "ハイブリッドIn";
+        defaultPrice = 30000;
+      } else if (state.invoiceType === 'other') {
+        defaultName = "ホームホワイトニング";
+        defaultPrice = 23000;
+      }
+
       const newItem = {
         id: Date.now().toString(),
-        name: "その他",
-        unitPrice: 0,
+        name: defaultName,
+        unitPrice: defaultPrice,
         quantity: 1,
         note: ""
       };
@@ -1244,13 +1286,33 @@
     document.getElementById('btn-reset').addEventListener('click', () => {
       if (confirm("入力データを初期値にリセットしますか？")) {
         state.patientInfo = { ...initialPatientInfo };
-        state.items = JSON.parse(JSON.stringify(initialItems));
+        
+        let defaultName = "その他";
+        let defaultPrice = 0;
+        if (state.invoiceType === 'implant') {
+          defaultName = "フィクスチャー";
+          defaultPrice = 300000;
+        } else if (state.invoiceType === 'prostho') {
+          defaultName = "ハイブリッドIn";
+          defaultPrice = 30000;
+        } else if (state.invoiceType === 'other') {
+          defaultName = "ホームホワイトニング";
+          defaultPrice = 23000;
+        }
+
+        state.items = [{
+          id: Date.now().toString(),
+          name: defaultName,
+          unitPrice: defaultPrice,
+          quantity: 1,
+          note: ""
+        }];
+
         state.discount = 0;
         state.adjustment = 0;
         state.taxRate = 10;
         state.isTaxInclusive = false;
         state.paidAmount = 0;
-        state.invoiceType = 'implant';
         saveState();
         renderAll();
       }
