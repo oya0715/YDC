@@ -109,7 +109,7 @@
 
   <div class="flex flex-col min-h-screen">
     
-    {/* Header */}
+    <!-- Header -->
     <header class="bg-white border-b border-slate-200/80 shadow-sm sticky top-0 z-30 no-print">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div class="flex items-center space-x-3">
@@ -148,7 +148,7 @@
       </div>
     </header>
 
-    {/* Validation Alert */}
+    <!-- Validation Alert -->
     <div id="validation-alert" class="bg-rose-50 border-b border-rose-100 py-3 px-4 text-center text-sm font-semibold text-rose-700 flex items-center justify-center gap-1.5 no-print hidden">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
@@ -156,13 +156,13 @@
       <span id="validation-msg">入力内容に不備があります</span>
     </div>
 
-    {/* Main Content Layout */}
+    <!-- Main Content Layout -->
     <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-8">
       
-      {/* Left Column: Interactive Input Controls */}
+      <!-- Left Column: Interactive Input Controls -->
       <div class="flex-1 space-y-6 no-print">
         
-        {/* 1. Patient Form Card */}
+        <!-- 1. Patient Form Card -->
         <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-4">
           <div class="flex items-center gap-2 pb-3 border-b border-slate-100">
             <div class="w-6 h-6 rounded-lg bg-clinic-50 text-clinic-600 flex items-center justify-center">
@@ -225,7 +225,7 @@
           </div>
         </div>
 
-        {/* 2. Treatment Items Card */}
+        <!-- 2. Treatment Items Card -->
         <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100">
             <div class="flex items-center gap-2">
@@ -252,7 +252,7 @@
           </div>
         </div>
 
-        {/* 3. Price Adjustments Card */}
+        <!-- 3. Price Adjustments Card -->
         <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-4">
           <div class="flex items-center gap-2 pb-3 border-b border-slate-100">
             <div class="w-6 h-6 rounded-lg bg-clinic-50 text-clinic-600 flex items-center justify-center">
@@ -265,7 +265,7 @@
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             
-            {/* Tax Mode Toggles */}
+            <!-- Tax Mode Toggles -->
             <div>
               <label class="block text-xs font-semibold text-slate-500 mb-1">消費税計算区分</label>
               <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl">
@@ -286,7 +286,7 @@
               </div>
             </div>
 
-            {/* Tax Rate */}
+            <!-- Tax Rate -->
             <div>
               <label class="block text-xs font-semibold text-slate-500 mb-1">消費税率 (%)</label>
               <div class="relative">
@@ -299,7 +299,7 @@
               </div>
             </div>
 
-            {/* Discount */}
+            <!-- Discount -->
             <div>
               <label class="block text-xs font-semibold text-slate-500 mb-1">値引き額</label>
               <div class="relative">
@@ -314,7 +314,7 @@
               </div>
             </div>
 
-            {/* Adjustment */}
+            <!-- Adjustment -->
             <div>
               <label class="block text-xs font-semibold text-slate-500 mb-1">端数調整額 (+ / -)</label>
               <div class="relative">
@@ -328,7 +328,7 @@
               </div>
             </div>
 
-            {/* Paid Amount */}
+            <!-- Paid Amount -->
             <div class="md:col-span-2">
               <label class="block text-xs font-semibold text-slate-500 mb-1">支払済み金額 (本日領収額など)</label>
               <div class="relative">
@@ -348,19 +348,19 @@
 
       </div>
 
-      {/* Right Column: Preview of the physical Invoice */}
+      <!-- Right Column: Preview of the physical Invoice -->
       <div class="w-full lg:w-[480px] xl:w-[520px] shrink-0 print-area">
         
-        {/* Desktop Sticky Container */}
+        <!-- Desktop Sticky Container -->
         <div class="sticky top-20 bg-white rounded-2xl border border-slate-200/80 p-6 md:p-8 shadow-md flex flex-col justify-between print-container">
           
-          {/* Print Title */}
+          <!-- Print Title -->
           <div class="hidden print:block text-right text-xs text-slate-400 font-medium mb-2">請求書控え / 患者様用</div>
 
-          {/* Main Invoice Section */}
+          <!-- Main Invoice Section -->
           <div class="space-y-6">
             
-            {/* Header Component */}
+            <!-- Header Component -->
             <div class="flex flex-col md:flex-row justify-between items-start gap-4 pb-5 border-b-2 border-slate-100">
               <div>
                 <h2 class="text-xl font-bold text-slate-800 tracking-wider">自費診療請求書</h2>
@@ -382,19 +382,19 @@
                   <p id="preview-clinic-phone" class="text-[10px] text-slate-400 font-medium mt-0.5">TEL: 03-1234-5678</p>
                 </div>
                 
-                {/* Register Seal Box */}
+                <!-- Register Seal Box -->
                 <div class="w-14 h-14 border border-dashed border-slate-300 rounded-md flex items-center justify-center text-[9px] text-slate-400 mt-2">
                   領収印
                 </div>
               </div>
             </div>
 
-            {/* Message/Intro */}
+            <!-- Message/Intro -->
             <p class="text-xs text-slate-600 leading-relaxed">
               毎度ありがとうございます。下記の通りご請求申し上げます。
             </p>
 
-            {/* Treatment Items Table */}
+            <!-- Treatment Items Table -->
             <div class="overflow-hidden border border-slate-200 rounded-xl">
               <table class="min-w-full divide-y divide-slate-200">
                 <thead class="bg-slate-50">
@@ -411,7 +411,7 @@
               </table>
             </div>
 
-            {/* Summary Block */}
+            <!-- Summary Block -->
             <div class="space-y-2 border-t border-slate-100 pt-4">
               <div class="flex justify-between items-center text-xs text-slate-500 font-medium">
                 <span>小計</span>
@@ -433,7 +433,7 @@
                 <span id="preview-adjustment" class="font-semibold text-slate-700">¥0</span>
               </div>
 
-              {/* Total Amount */}
+              <!-- Total Amount -->
               <div class="flex justify-between items-center bg-slate-50 px-3.5 py-3 rounded-xl border border-slate-100 mt-2">
                 <span class="text-sm font-bold text-slate-600">請求合計金額（税込）</span>
                 <span id="preview-total" class="text-lg font-black text-slate-800 tracking-wide">¥0</span>
@@ -444,7 +444,7 @@
                 <span id="preview-paid" class="font-semibold text-slate-700">¥0</span>
               </div>
 
-              {/* Remaining Unpaid Amount */}
+              <!-- Remaining Unpaid Amount -->
               <div class="flex justify-between items-center bg-clinic-50 border border-clinic-100 px-3.5 py-3.5 rounded-xl mt-3">
                 <div class="flex flex-col">
                   <span class="text-xs font-bold text-clinic-700">今回ご請求金額</span>
@@ -457,7 +457,7 @@
 
           </div>
 
-          {/* Footer notes */}
+          <!-- Footer notes -->
           <div class="mt-8 pt-4 border-t border-slate-100 text-[10px] text-slate-400 space-y-1">
             <p class="font-medium text-slate-500">【備考】</p>
             <p class="leading-relaxed">
@@ -473,7 +473,7 @@
 
     </main>
     
-    {/* Web Footer */}
+    <!-- Web Footer -->
     <footer class="bg-white border-t border-slate-200/60 py-4 text-center text-xs text-slate-400 font-medium no-print mt-8">
       <p>&copy; 2026 みなと歯科クリニック - 自費診療請求書作成システム</p>
     </footer>
