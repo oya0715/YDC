@@ -479,7 +479,7 @@
 
               <div id="preview-discount-row" class="flex justify-between items-center text-xs text-slate-500 font-medium hidden">
                 <span>値引き</span>
-                <span id="preview-discount" class="font-semibold text-emerald-600">-¥0</span>
+                <span id="preview-discount" class="font-semibold text-slate-700">-¥0</span>
               </div>
 
               <div class="flex justify-between items-center text-xs text-slate-500 font-medium">
@@ -504,12 +504,12 @@
               </div>
 
               <!-- Remaining Unpaid Amount -->
-              <div class="flex justify-between items-center bg-clinic-50 border border-clinic-100 px-3.5 py-3.5 rounded-xl mt-3">
+              <div class="flex justify-between items-center bg-slate-100 border border-slate-200 px-3.5 py-3.5 rounded-xl mt-3">
                 <div class="flex flex-col">
-                  <span class="text-xs font-bold text-clinic-700">今回ご請求金額</span>
-                  <span class="text-[9px] text-clinic-500 font-medium mt-0.5">(合計金額 - 既収金)</span>
+                  <span class="text-xs font-bold text-slate-800">今回ご請求金額</span>
+                  <span class="text-[9px] text-slate-500 font-medium mt-0.5">(合計金額 - 既収金)</span>
                 </div>
-                <span id="preview-unpaid" class="text-xl font-extrabold text-clinic-700 tracking-wide">¥0</span>
+                <span id="preview-unpaid" class="text-xl font-extrabold text-slate-900 tracking-wide font-sans">¥0</span>
               </div>
 
             </div>
@@ -1029,8 +1029,8 @@
       let guaranteeHTML = '';
       if (state.invoiceType === 'implant') {
         guaranteeHTML = `
-          <div class="mt-4 p-3 bg-teal-50/50 border border-teal-100 rounded-lg text-[9px] text-slate-600 leading-relaxed space-y-1">
-            <p class="font-bold text-teal-800">＜保証について＞</p>
+          <div class="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-lg text-[9px] text-slate-600 leading-relaxed space-y-1">
+            <p class="font-bold text-slate-800">＜保証について＞</p>
             <p>ガイドデント認定医療機関において、インプラント手術を受けられた患者さまの再手術および上部構造の修復についてはインプラント10年保証に基づいて保証させていただきます。</p>
             <p class="font-semibold text-slate-700">※但し、当医院の指定する定期検診にすべて応じて頂いてる方にかぎります。</p>
             <p>また、外傷・事故の場合は対象外とさせて頂きます。</p>
@@ -1038,8 +1038,8 @@
         `;
       } else if (state.invoiceType === 'prostho') {
         guaranteeHTML = `
-          <div class="mt-4 p-3 bg-teal-50/50 border border-teal-100 rounded-lg text-[9px] text-slate-600 leading-relaxed space-y-1">
-            <p class="font-bold text-teal-800">＜保証について＞</p>
+          <div class="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-lg text-[9px] text-slate-600 leading-relaxed space-y-1">
+            <p class="font-bold text-slate-800">＜保証について＞</p>
             <p>3年以内は当医院がすべて負担いたします。3年以降は、下記の割合でご負担いただきます。</p>
             <div class="pl-4 space-y-0.5">
               <p>・3年以降4年未満：患者さん負担5割</p>
