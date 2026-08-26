@@ -261,31 +261,22 @@ export const TreatmentItems: React.FC<TreatmentItemsProps> = ({ items, onChange 
 
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 pr-8">
               
-              {/* Selector/Input Name */}
+              {/* Selector Name */}
               <div className="sm:col-span-5">
                 <label className="block text-xs font-semibold text-slate-500 mb-1">診療項目名 <span className="text-rose-500">*</span></label>
-                <div className="flex gap-2">
-                  <select
-                    value={PRESETS.some(p => p.name === item.name) ? item.name : "その他"}
-                    onChange={e => handleUpdateItem(item.id, { name: e.target.value })}
-                    className="w-1/2 px-3 py-1.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-clinic-500"
-                  >
-                    {categories.map(cat => (
-                      <optgroup key={cat} label={cat}>
-                        {PRESETS.filter(p => p.category === cat).map(preset => (
-                          <option key={preset.name} value={preset.name}>{preset.name}</option>
-                        ))}
-                      </optgroup>
-                    ))}
-                  </select>
-                  <input
-                    type="text"
-                    value={item.name}
-                    onChange={e => handleUpdateItem(item.id, { name: e.target.value })}
-                    placeholder="治療内容を入力"
-                    className="w-1/2 px-3 py-1.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-clinic-500 focus:border-clinic-500"
-                  />
-                </div>
+                <select
+                  value={PRESETS.some(p => p.name === item.name) ? item.name : "その他"}
+                  onChange={e => handleUpdateItem(item.id, { name: e.target.value })}
+                  className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-clinic-500 font-semibold text-slate-700"
+                >
+                  {categories.map(cat => (
+                    <optgroup key={cat} label={cat}>
+                      {PRESETS.filter(p => p.category === cat).map(preset => (
+                        <option key={preset.name} value={preset.name}>{preset.name}</option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
               </div>
 
               {/* Unit Price */}
