@@ -174,6 +174,18 @@
           </div>
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="md:col-span-2">
+              <label class="block text-xs font-semibold text-slate-500 mb-1">請求書タイプ <span class="text-rose-500">*</span></label>
+              <select
+                id="input-invoice-type"
+                onchange="updateInvoiceType(this.value)"
+                class="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-clinic-500 bg-white font-semibold text-slate-700"
+              >
+                <option value="implant">インプラント用請求書 (10年保証)</option>
+                <option value="prostho">自費補綴用請求書 (5年保証・義歯除く)</option>
+                <option value="other">その他自費（矯正など）用請求書 (保証なし)</option>
+              </select>
+            </div>
             <div>
               <label class="block text-xs font-semibold text-slate-500 mb-1">患者氏名 <span class="text-rose-500">*</span></label>
               <input
@@ -457,16 +469,8 @@
 
           </div>
 
-          <!-- Footer notes -->
-          <div class="mt-8 pt-4 border-t border-slate-100 text-[10px] text-slate-400 space-y-1">
-            <p class="font-medium text-slate-500">【備考】</p>
-            <p class="leading-relaxed">
-              ・本請求書は自費診療（保険外診療）に関する請求書です。保険診療の領収書とは別扱いとなります。
-            </p>
-            <p class="leading-relaxed">
-              ・ご不明な点がございましたら、当院受付窓口までお気軽にお問い合わせください。
-            </p>
-          </div>
+          <!-- Dynamic Footer details (Payment, bank accounts, signature, guarantees) -->
+          <div id="preview-footer-container"></div>
 
         </div>
       </div>
@@ -577,7 +581,8 @@
       adjustment: 0,
       taxRate: 10,
       isTaxInclusive: false,
-      paidAmount: 0
+      paidAmount: 0,
+      invoiceType: 'implant'
     };
 
     // Load from LocalStorage if available
@@ -590,6 +595,7 @@
         const savedTaxRate = localStorage.getItem('ydc_tax_rate');
         const savedTaxInc = localStorage.getItem('ydc_tax_inc');
         const savedPaid = localStorage.getItem('ydc_paid');
+        const savedInvoiceType = localStorage.getItem('ydc_invoice_type');
 
         if (savedPatient) state.patientInfo = JSON.parse(savedPatient);
         if (savedItems) state.items = JSON.parse(savedItems);
@@ -598,6 +604,7 @@
         if (savedTaxRate) state.taxRate = Number(savedTaxRate);
         if (savedTaxInc) state.isTaxInclusive = JSON.parse(savedTaxInc);
         if (savedPaid) state.paidAmount = Number(savedPaid);
+        if (savedInvoiceType) state.invoiceType = savedInvoiceType;
       } catch (e) {
         console.error("Error loading localStorage state:", e);
       }
@@ -612,6 +619,7 @@
         localStorage.setItem('ydc_tax_rate', String(state.taxRate));
         localStorage.setItem('ydc_tax_inc', JSON.stringify(state.isTaxInclusive));
         localStorage.setItem('ydc_paid', String(state.paidAmount));
+        localStorage.setItem('ydc_invoice_type', state.invoiceType);
       } catch (e) {
         console.error("Error saving localStorage state:", e);
       }
@@ -680,6 +688,7 @@
 
     // 6. UI Synchronization & Renders
     function renderInputFields() {
+      document.getElementById('input-invoice-type').value = state.invoiceType;
       document.getElementById('input-name').value = state.patientInfo.name;
       document.getElementById('input-patient-id').value = state.patientInfo.patientId;
       document.getElementById('input-invoice-date').value = state.patientInfo.invoiceDate;
@@ -870,6 +879,100 @@
 
       // Balance
       document.getElementById('preview-unpaid').innerText = formatYen(unpaidAmount);
+
+      // Dynamic footer notes, payment details, guarantees and signatures
+      const footerContainer = document.getElementById('preview-footer-container');
+      let guaranteeHTML = '';
+      if (state.invoiceType === 'implant') {
+        guaranteeHTML = `
+          <div class="mt-4 p-3 bg-teal-50/50 border border-teal-100 rounded-lg text-[9px] text-slate-600 leading-relaxed space-y-1">
+            <p class="font-bold text-teal-800">＜保証について＞</p>
+            <p>ガイドデント認定医療機関において、インプラント手術を受けられた患者さまの再手術および上部構造の修復についてはインプラント10年保証に基づいて保証させていただきます。</p>
+            <p class="font-semibold text-slate-700">※但し、当医院の指定する定期検診にすべて応じて頂いてる方にかぎります。</p>
+            <p>また、外傷・事故の場合は対象外とさせて頂きます。</p>
+          </div>
+        `;
+      } else if (state.invoiceType === 'prostho') {
+        guaranteeHTML = `
+          <div class="mt-4 p-3 bg-teal-50/50 border border-teal-100 rounded-lg text-[9px] text-slate-600 leading-relaxed space-y-1">
+            <p class="font-bold text-teal-800">＜保証について＞</p>
+            <p>3年以内は当医院がすべて負担いたします。3年以降は、下記の割合でご負担いただきます。</p>
+            <div class="pl-4 space-y-0.5">
+              <p>・3年以降4年未満：患者さん負担5割</p>
+              <p>・4年以降5年未満：患者さん負担6割</p>
+              <p>・5年以降6年未満：患者さん負担7割</p>
+            </div>
+            <p class="font-semibold text-slate-700">※但し、当医院の指定する定期検診にすべて応じて頂いてる方にかぎります。</p>
+            <p>また、外傷・事故の場合は対象外とさせて頂きます。</p>
+          </div>
+        `;
+      }
+
+      footerContainer.innerHTML = `
+        <div class="mt-6 border-t border-slate-100 pt-4 text-[10px] space-y-3">
+          <div class="flex flex-col sm:flex-row justify-between gap-2 text-slate-600 font-medium">
+            <p>支払い方法：現金受付払い・振込（三井住友銀行／兵庫信用金庫）・デンタルローン</p>
+            <p class="sm:text-right">支払い期日：（　　　　　　　　　　　　　　　　　）</p>
+          </div>
+          
+          <p class="text-[9px] text-slate-500 mt-1 font-semibold">お振込みの際は下記口座へお願い致します。</p>
+          <div class="overflow-hidden border border-slate-200 rounded-lg">
+            <table class="min-w-full divide-y divide-slate-200 text-center">
+              <thead class="bg-slate-50">
+                <tr class="divide-x divide-slate-200">
+                  <th class="px-2 py-1 font-bold text-slate-500">銀行名</th>
+                  <td class="px-2 py-1 font-semibold text-slate-700">三井住友銀行</td>
+                  <td class="px-2 py-1 font-semibold text-slate-700">兵庫信用金庫</td>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                <tr class="divide-x divide-slate-200">
+                  <th class="px-2 py-1 font-bold text-slate-500 bg-slate-50/50">支店名</th>
+                  <td class="px-2 py-1 text-slate-600">網干支店</td>
+                  <td class="px-2 py-1 text-slate-600">御津支店</td>
+                </tr>
+                <tr class="divide-x divide-slate-200">
+                  <th class="px-2 py-1 font-bold text-slate-500 bg-slate-50/50">口座種類</th>
+                  <td class="px-2 py-1 text-slate-600">普通</td>
+                  <td class="px-2 py-1 text-slate-600">普通</td>
+                </tr>
+                <tr class="divide-x divide-slate-200">
+                  <th class="px-2 py-1 font-bold text-slate-500 bg-slate-50/50">口座番号</th>
+                  <td class="px-2 py-1 font-bold text-slate-800">3215296</td>
+                  <td class="px-2 py-1 font-bold text-slate-800">0179190</td>
+                </tr>
+                <tr class="divide-x divide-slate-200">
+                  <th class="px-2 py-1 font-bold text-slate-500 bg-slate-50/50">名義人</th>
+                  <td class="px-2 py-1 text-slate-600 tracking-wider">ヤマモト タカフミ</td>
+                  <td class="px-2 py-1 text-slate-600 tracking-wider">ヤマモト タカフミ</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          ${guaranteeHTML}
+
+          <div class="mt-5 pt-3 border-t border-slate-100 flex flex-col items-end space-y-3 text-slate-700">
+            <div class="w-full text-left font-medium text-[9px] text-slate-400">
+              上記の内容について説明をうけ了承した。
+            </div>
+            <div class="flex flex-col gap-2 w-full max-w-[280px] self-end pt-1">
+              <div class="flex justify-between items-baseline border-b border-slate-300 pb-0.5">
+                <span class="font-semibold shrink-0">患者署名</span>
+                <span class="w-full"></span>
+              </div>
+              <div class="flex justify-between items-baseline border-b border-slate-300 pb-0.5">
+                <span class="font-semibold shrink-0">代理人署名</span>
+                <span class="w-full"></span>
+                <span class="font-medium text-[8px] shrink-0 text-slate-400">（続柄）______</span>
+              </div>
+            </div>
+            <div class="text-right text-[9px] text-slate-500 font-bold pt-0.5">
+              やまもと歯科
+            </div>
+          </div>
+        </div>
+      `;
     }
 
     function renderAll() {
@@ -880,6 +983,12 @@
     }
 
     // 7. Global Actions & Event Handlers
+    window.updateInvoiceType = function(val) {
+      state.invoiceType = val;
+      saveState();
+      renderAll();
+    };
+
     window.removeItem = function(id) {
       if (state.items.length <= 1) {
         alert("診療項目は最低1つ必要です。");
@@ -1029,6 +1138,7 @@
         state.taxRate = 10;
         state.isTaxInclusive = false;
         state.paidAmount = 0;
+        state.invoiceType = 'implant';
         saveState();
         renderAll();
       }
