@@ -4,6 +4,7 @@ import { TreatmentItem } from '../types';
 interface TreatmentItemsProps {
   items: TreatmentItem[];
   onChange: (updatedItems: TreatmentItem[]) => void;
+  invoiceType: string;
 }
 
 const PRESETS = [
@@ -180,12 +181,23 @@ const ToothSelector: React.FC<ToothSelectorProps> = ({ note, onChange }) => {
   );
 };
 
-export const TreatmentItems: React.FC<TreatmentItemsProps> = ({ items, onChange }) => {
+export const TreatmentItems: React.FC<TreatmentItemsProps> = ({ items, onChange, invoiceType }) => {
+  const filteredPresets = PRESETS.filter(p => {
+    if (invoiceType === 'implant') {
+      return p.category === 'インプラント';
+    }
+    if (invoiceType === 'prostho') {
+      return p.category === '補綴';
+    }
+    return p.category !== 'インプラント' && p.category !== '補綴';
+  });
+
   const handleAddItem = () => {
+    const defaultPreset = filteredPresets[0] || { name: "その他", price: 0 };
     const newItem: TreatmentItem = {
       id: Date.now().toString(),
-      name: "その他",
-      unitPrice: 0,
+      name: defaultPreset.name,
+      unitPrice: defaultPreset.price,
       quantity: 1,
       note: ""
     };
@@ -220,7 +232,7 @@ export const TreatmentItems: React.FC<TreatmentItemsProps> = ({ items, onChange 
     return `¥${amount.toLocaleString('ja-JP')}`;
   };
 
-  const categories = Array.from(new Set(PRESETS.map(p => p.category)));
+  const categories = Array.from(new Set(filteredPresets.map(p => p.category)));
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-4">
@@ -265,13 +277,13 @@ export const TreatmentItems: React.FC<TreatmentItemsProps> = ({ items, onChange 
               <div className="sm:col-span-5">
                 <label className="block text-xs font-semibold text-slate-500 mb-1">診療項目名 <span className="text-rose-500">*</span></label>
                 <select
-                  value={PRESETS.some(p => p.name === item.name) ? item.name : "その他"}
+                  value={filteredPresets.some(p => p.name === item.name) ? item.name : (filteredPresets[0]?.name || "その他")}
                   onChange={e => handleUpdateItem(item.id, { name: e.target.value })}
                   className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-clinic-500 font-semibold text-slate-700"
                 >
                   {categories.map(cat => (
                     <optgroup key={cat} label={cat}>
-                      {PRESETS.filter(p => p.category === cat).map(preset => (
+                      {filteredPresets.filter(p => p.category === cat).map(preset => (
                         <option key={preset.name} value={preset.name}>{preset.name}</option>
                       ))}
                     </optgroup>
