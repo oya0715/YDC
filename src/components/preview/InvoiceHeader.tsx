@@ -21,15 +21,12 @@ export const InvoiceHeader: React.FC<InvoiceHeaderProps> = ({ patientInfo }) => 
   return (
     <div className="flex flex-col md:flex-row justify-between items-start gap-4 pb-5 border-b-2 border-slate-100">
       <div>
-        <h2 className="text-xl font-bold text-slate-800 tracking-wider">自費診療請求書</h2>
+        <h2 className="text-xl font-bold text-slate-800 tracking-wider">請求書</h2>
         <div className="mt-2.5 space-y-1.5">
           <div className="flex items-baseline gap-1">
             <span className="text-base font-bold text-slate-800 border-b border-slate-800 pb-0.5">{patientInfo.name || "山田 太郎"}</span>
             <span className="text-xs text-slate-500 font-semibold">様</span>
           </div>
-          {patientInfo.patientId && (
-            <p className="text-xs text-slate-500 font-semibold">患者番号: {patientInfo.patientId}</p>
-          )}
         </div>
       </div>
       
@@ -42,11 +39,6 @@ export const InvoiceHeader: React.FC<InvoiceHeaderProps> = ({ patientInfo }) => 
           {patientInfo.clinicPhone && (
             <p className="text-[10px] text-slate-400 font-medium mt-0.5">TEL: {patientInfo.clinicPhone}</p>
           )}
-        </div>
-        
-        {/* Register Seal Box (領収印) */}
-        <div className="w-14 h-14 border border-dashed border-slate-300 rounded-md flex items-center justify-center text-[9px] text-slate-400 mt-2">
-          領収印
         </div>
       </div>
     </div>
