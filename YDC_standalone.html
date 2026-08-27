@@ -86,7 +86,7 @@
         width: 210mm;
         height: 297mm;
         overflow: hidden;
-        font-size: 11px !important;
+        font-size: 14.5px !important;
       }
 
       .print-area {
@@ -126,27 +126,27 @@
         box-shadow: none !important;
       }
 
-      /* Compact vertical spacings for A4 single-page fit */
+      /* Spacings for A4 single-page fit */
       .print-container .space-y-6 > * + * {
-        margin-top: 0.75rem !important;
+        margin-top: 1.25rem !important;
       }
       .print-container .space-y-4 > * + * {
-        margin-top: 0.5rem !important;
+        margin-top: 0.75rem !important;
       }
       .print-container .space-y-3 > * + * {
-        margin-top: 0.4rem !important;
+        margin-top: 0.6rem !important;
       }
       .print-container .space-y-2 > * + * {
-        margin-top: 0.25rem !important;
+        margin-top: 0.4rem !important;
       }
 
-      /* Table cell spacing reduction */
+      /* Table cell spacing */
       .print-container th,
       .print-container td {
-        padding-top: 0.35rem !important;
-        padding-bottom: 0.35rem !important;
-        padding-left: 0.5rem !important;
-        padding-right: 0.5rem !important;
+        padding-top: 0.55rem !important;
+        padding-bottom: 0.55rem !important;
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
       }
 
       /* Table header background for monochrome contrast */
@@ -187,7 +187,7 @@
 
       @page {
         size: A4 portrait;
-        margin: 10mm 12mm 10mm 12mm;
+        margin: 15mm 20mm 15mm 20mm;
       }
     }
   </style>
