@@ -330,7 +330,10 @@ export const TreatmentItems: React.FC<TreatmentItemsProps> = ({ items, onChange,
               {shouldShowToothSelector(item.name) && (
                 <ToothSelector
                   note={item.note}
-                  onChange={(newNote) => handleUpdateItem(item.id, { note: newNote })}
+                  onChange={(newNote) => {
+                    const teethCount = newNote ? newNote.split(', ').length : 1;
+                    handleUpdateItem(item.id, { note: newNote, quantity: teethCount });
+                  }}
                 />
               )}
 
