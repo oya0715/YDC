@@ -304,7 +304,7 @@ function App() {
       
       {/* Web Footer */}
       <footer className="bg-white border-t border-slate-200/60 py-4 text-center text-xs text-slate-400 font-medium no-print mt-8">
-        <p>&copy; 2026 みなと歯科クリニック - 自費診療請求書作成システム</p>
+        <p>&copy; 2026 やまもと歯科 - 自費診療請求書作成システム</p>
       </footer>
 
     </div>
