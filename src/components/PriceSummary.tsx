@@ -7,8 +7,6 @@ interface PriceSummaryProps {
   setTaxRate: (val: number) => void;
   discount: number;
   setDiscount: (val: number) => void;
-  adjustment: number;
-  setAdjustment: (val: number) => void;
   paidAmount: number;
   setPaidAmount: (val: number) => void;
 }
@@ -20,8 +18,6 @@ export const PriceSummary: React.FC<PriceSummaryProps> = ({
   setTaxRate,
   discount,
   setDiscount,
-  adjustment,
-  setAdjustment,
   paidAmount,
   setPaidAmount,
 }) => {
@@ -80,7 +76,7 @@ export const PriceSummary: React.FC<PriceSummaryProps> = ({
         <div>
           <label className="block text-xs font-semibold text-slate-500 mb-1">値引き額</label>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">¥</span>
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">¥</span>
             <input
               type="number"
               value={discount || ''}
@@ -92,23 +88,8 @@ export const PriceSummary: React.FC<PriceSummaryProps> = ({
           </div>
         </div>
 
-        {/* Adjustment */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-500 mb-1">端数調整額 (+ / -)</label>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">¥</span>
-            <input
-              type="number"
-              value={adjustment || ''}
-              onChange={e => setAdjustment(Number(e.target.value))}
-              placeholder="0"
-              className="w-full pl-7 pr-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-clinic-500 bg-slate-50/50 text-right font-semibold text-slate-700"
-            />
-          </div>
-        </div>
-
         {/* Paid Amount */}
-        <div className="md:col-span-2">
+        <div>
           <label className="block text-xs font-semibold text-slate-500 mb-1">支払済み金額 (本日領収額など)</label>
           <div className="relative">
             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-bold">¥</span>
@@ -118,7 +99,7 @@ export const PriceSummary: React.FC<PriceSummaryProps> = ({
               onChange={e => setPaidAmount(Number(e.target.value))}
               placeholder="0"
               min="0"
-              className="w-full pl-8 pr-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-clinic-500 bg-teal-50/20 text-right font-bold text-slate-800 text-base"
+              className="w-full pl-8 pr-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-clinic-500 bg-teal-50/20 text-right font-bold text-slate-800 text-base"
             />
           </div>
         </div>
