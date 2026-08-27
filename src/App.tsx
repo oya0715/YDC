@@ -137,6 +137,37 @@ function App() {
     }
   }, [patientInfo, items, discount, taxRate, paidAmount]);
 
+  // Dynamic A4 single-page scaling hook
+  useEffect(() => {
+    const handleBeforePrint = () => {
+      const container = document.querySelector('.print-container') as HTMLElement;
+      if (!container) return;
+      container.style.setProperty('--print-scale', '1');
+      const maxHeight = 960; // 96 DPI safe limit for A4 portrait
+      let scale = 1.0;
+      let height = container.scrollHeight;
+      while (height > maxHeight && scale > 0.6) {
+        scale -= 0.05;
+        container.style.setProperty('--print-scale', String(scale));
+        height = container.scrollHeight;
+      }
+    };
+
+    const handleAfterPrint = () => {
+      const container = document.querySelector('.print-container') as HTMLElement;
+      if (container) {
+        container.style.setProperty('--print-scale', '1');
+      }
+    };
+
+    window.addEventListener('beforeprint', handleBeforePrint);
+    window.addEventListener('afterprint', handleAfterPrint);
+    return () => {
+      window.removeEventListener('beforeprint', handleBeforePrint);
+      window.removeEventListener('afterprint', handleAfterPrint);
+    };
+  }, []);
+
   // 2. Calculations
   const subtotal = items.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
   const taxBase = Math.max(0, subtotal - discount);
