@@ -646,6 +646,8 @@
       selectedTeeth.sort((a, b) => toothOrder.indexOf(a) - toothOrder.indexOf(b));
       
       item.note = selectedTeeth.join(', ');
+      item.quantity = selectedTeeth.length > 0 ? selectedTeeth.length : 1;
+      
       saveState();
       validate();
       renderTreatmentItems();
@@ -657,6 +659,7 @@
       if (!item) return;
       
       item.note = '';
+      item.quantity = 1;
       saveState();
       validate();
       renderTreatmentItems();
