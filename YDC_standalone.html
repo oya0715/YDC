@@ -690,7 +690,12 @@
         const savedPaid = localStorage.getItem('ydc_paid');
         const savedInvoiceType = localStorage.getItem('ydc_invoice_type');
 
-        if (savedPatient) state.patientInfo = JSON.parse(savedPatient);
+        if (savedPatient) {
+          state.patientInfo = JSON.parse(savedPatient);
+        }
+        if (!state.patientInfo.name) {
+          state.patientInfo.name = "山田 太郎";
+        }
         if (savedItems) {
           state.items = JSON.parse(savedItems);
           state.items.forEach(item => {
