@@ -53,10 +53,7 @@ function App() {
     return saved ? Number(saved) : 0;
   });
 
-  const [adjustment, setAdjustment] = useState<number>(() => {
-    const saved = localStorage.getItem('ydc_adjustment');
-    return saved ? Number(saved) : 0;
-  });
+
 
   const [taxRate, setTaxRate] = useState<number>(() => {
     const saved = localStorage.getItem('ydc_tax_rate');
@@ -93,9 +90,7 @@ function App() {
     localStorage.setItem('ydc_discount', String(discount));
   }, [discount]);
 
-  useEffect(() => {
-    localStorage.setItem('ydc_adjustment', String(adjustment));
-  }, [adjustment]);
+
 
   useEffect(() => {
     localStorage.setItem('ydc_tax_rate', String(taxRate));
@@ -145,11 +140,11 @@ function App() {
   if (isTaxInclusive) {
     // 税込 (内税の場合: 消費税は合計金額の中に内包されているため、内訳額のみ表示)
     tax = Math.floor(taxBase * (taxRate / (100 + taxRate)));
-    totalAmount = Math.max(0, taxBase + adjustment);
+    totalAmount = Math.max(0, taxBase);
   } else {
     // 税抜 (外税の場合: 小計 - 値引き額に、消費税率分を加算)
     tax = Math.floor(taxBase * (taxRate / 100));
-    totalAmount = Math.max(0, taxBase + tax + adjustment);
+    totalAmount = Math.max(0, taxBase + tax);
   }
 
   const unpaidAmount = Math.max(0, totalAmount - paidAmount);
@@ -183,7 +178,6 @@ function App() {
       setPatientInfo(initialPatientInfo);
       setItems(initialItems);
       setDiscount(0);
-      setAdjustment(0);
       setTaxRate(10);
       setIsTaxInclusive(false);
       setPaidAmount(0);
@@ -274,8 +268,6 @@ function App() {
             setTaxRate={setTaxRate}
             discount={discount}
             setDiscount={setDiscount}
-            adjustment={adjustment}
-            setAdjustment={setAdjustment}
             paidAmount={paidAmount}
             setPaidAmount={setPaidAmount}
           />
@@ -292,7 +284,6 @@ function App() {
             tax={tax}
             taxRate={taxRate}
             isTaxInclusive={isTaxInclusive}
-            adjustment={adjustment}
             totalAmount={totalAmount}
             paidAmount={paidAmount}
             unpaidAmount={unpaidAmount}
