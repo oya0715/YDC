@@ -59,33 +59,52 @@ input[type=number] {
     padding: 0 !important;
     margin: 0 !important;
     background: #ffffff !important;
-    font-size: 19px !important;
+    
+    --print-scale: 1;
+    --size-9px: calc(14px * var(--print-scale));
+    --size-10px: calc(15px * var(--print-scale));
+    --size-xs: calc(17.5px * var(--print-scale));
+    --size-sm: calc(19.5px * var(--print-scale));
+    --size-base: calc(21.5px * var(--print-scale));
+    --size-lg: calc(23px * var(--print-scale));
+    --size-xl: calc(28px * var(--print-scale));
+    --size-2xl: calc(34px * var(--print-scale));
+    
+    --space-y-6-mt: calc(1.25rem * var(--print-scale));
+    --space-y-4-mt: calc(0.75rem * var(--print-scale));
+    --space-y-3-mt: calc(0.6rem * var(--print-scale));
+    --space-y-2-mt: calc(0.4rem * var(--print-scale));
+    
+    --td-py: calc(0.55rem * var(--print-scale));
+    --td-px: calc(0.75rem * var(--print-scale));
+    
+    font-size: calc(19px * var(--print-scale)) !important;
   }
 
   /* Scale text sizes inside the printed document for elderly legibility */
   .print-container .text-\[9px\] {
-    font-size: 14px !important;
+    font-size: var(--size-9px) !important;
   }
   .print-container .text-\[10px\] {
-    font-size: 15px !important;
+    font-size: var(--size-10px) !important;
   }
   .print-container .text-xs {
-    font-size: 17.5px !important;
+    font-size: var(--size-xs) !important;
   }
   .print-container .text-sm {
-    font-size: 19.5px !important;
+    font-size: var(--size-sm) !important;
   }
   .print-container .text-base {
-    font-size: 21.5px !important;
+    font-size: var(--size-base) !important;
   }
   .print-container .text-lg {
-    font-size: 23px !important;
+    font-size: var(--size-lg) !important;
   }
   .print-container .text-xl {
-    font-size: 28px !important;
+    font-size: var(--size-xl) !important;
   }
   .print-container .text-2xl {
-    font-size: 34px !important;
+    font-size: var(--size-2xl) !important;
   }
 
   /* Force monochrome colors and borders for clear black & white print */
@@ -104,25 +123,25 @@ input[type=number] {
 
   /* Spacings for A4 single-page fit */
   .print-container .space-y-6 > * + * {
-    margin-top: 1.25rem !important;
+    margin-top: var(--space-y-6-mt) !important;
   }
   .print-container .space-y-4 > * + * {
-    margin-top: 0.75rem !important;
+    margin-top: var(--space-y-4-mt) !important;
   }
   .print-container .space-y-3 > * + * {
-    margin-top: 0.6rem !important;
+    margin-top: var(--space-y-3-mt) !important;
   }
   .print-container .space-y-2 > * + * {
-    margin-top: 0.4rem !important;
+    margin-top: var(--space-y-2-mt) !important;
   }
 
   /* Table cell spacing */
   .print-container th,
   .print-container td {
-    padding-top: 0.55rem !important;
-    padding-bottom: 0.55rem !important;
-    padding-left: 0.75rem !important;
-    padding-right: 0.75rem !important;
+    padding-top: var(--td-py) !important;
+    padding-bottom: var(--td-py) !important;
+    padding-left: var(--td-px) !important;
+    padding-right: var(--td-px) !important;
   }
 
   /* Table header background for monochrome contrast */
