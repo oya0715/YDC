@@ -381,22 +381,8 @@
               </div>
             </div>
 
-            <!-- Adjustment -->
-            <div>
-              <label class="block text-xs font-semibold text-slate-500 mb-1">端数調整額 (+ / -)</label>
-              <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">¥</span>
-                <input
-                  type="number"
-                  id="input-adjustment"
-                  placeholder="0"
-                  class="w-full pl-7 pr-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-clinic-500 bg-slate-50/50 text-right font-semibold text-slate-700"
-                />
-              </div>
-            </div>
-
             <!-- Paid Amount -->
-            <div class="md:col-span-2">
+            <div>
               <label class="block text-xs font-semibold text-slate-500 mb-1">支払済み金額 (本日領収額など)</label>
               <div class="relative">
                 <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-bold">¥</span>
@@ -487,10 +473,7 @@
                 <span id="preview-tax" class="font-semibold text-slate-700">¥0</span>
               </div>
 
-              <div id="preview-adjustment-row" class="flex justify-between items-center text-xs text-slate-500 font-medium hidden">
-                <span>端数調整額</span>
-                <span id="preview-adjustment" class="font-semibold text-slate-700">¥0</span>
-              </div>
+
 
               <!-- Total Amount -->
               <div class="flex justify-between items-center bg-slate-50 px-3.5 py-3 rounded-xl border border-slate-100 mt-2">
@@ -690,7 +673,6 @@
       patientInfo: { ...initialPatientInfo },
       items: JSON.parse(JSON.stringify(initialItems)),
       discount: 0,
-      adjustment: 0,
       taxRate: 10,
       isTaxInclusive: false,
       paidAmount: 0,
@@ -703,7 +685,6 @@
         const savedPatient = localStorage.getItem('ydc_patient');
         const savedItems = localStorage.getItem('ydc_items');
         const savedDiscount = localStorage.getItem('ydc_discount');
-        const savedAdjustment = localStorage.getItem('ydc_adjustment');
         const savedTaxRate = localStorage.getItem('ydc_tax_rate');
         const savedTaxInc = localStorage.getItem('ydc_tax_inc');
         const savedPaid = localStorage.getItem('ydc_paid');
@@ -719,7 +700,6 @@
           });
         }
         if (savedDiscount) state.discount = Number(savedDiscount);
-        if (savedAdjustment) state.adjustment = Number(savedAdjustment);
         if (savedTaxRate) state.taxRate = Number(savedTaxRate);
         if (savedTaxInc) state.isTaxInclusive = JSON.parse(savedTaxInc);
         if (savedPaid) state.paidAmount = Number(savedPaid);
@@ -734,7 +714,6 @@
         localStorage.setItem('ydc_patient', JSON.stringify(state.patientInfo));
         localStorage.setItem('ydc_items', JSON.stringify(state.items));
         localStorage.setItem('ydc_discount', String(state.discount));
-        localStorage.setItem('ydc_adjustment', String(state.adjustment));
         localStorage.setItem('ydc_tax_rate', String(state.taxRate));
         localStorage.setItem('ydc_tax_inc', JSON.stringify(state.isTaxInclusive));
         localStorage.setItem('ydc_paid', String(state.paidAmount));
@@ -757,10 +736,10 @@
 
       if (state.isTaxInclusive) {
         tax = Math.floor(taxBase * (state.taxRate / (100 + state.taxRate)));
-        totalAmount = Math.max(0, taxBase + state.adjustment);
+        totalAmount = Math.max(0, taxBase);
       } else {
         tax = Math.floor(taxBase * (state.taxRate / 100));
-        totalAmount = Math.max(0, taxBase + tax + state.adjustment);
+        totalAmount = Math.max(0, taxBase + tax);
       }
 
       const unpaidAmount = Math.max(0, totalAmount - state.paidAmount);
@@ -813,7 +792,6 @@
 
       document.getElementById('input-tax-rate').value = state.taxRate;
       document.getElementById('input-discount').value = state.discount || '';
-      document.getElementById('input-adjustment').value = state.adjustment || '';
       document.getElementById('input-paid-amount').value = state.paidAmount || '';
 
       // Toggles styles
@@ -1003,14 +981,7 @@
       document.getElementById('preview-tax-label').innerText = `消費税 (${state.taxRate}% ${state.isTaxInclusive ? '内税' : '外税'})`;
       document.getElementById('preview-tax').innerText = state.isTaxInclusive ? `(${formatYen(tax)})` : formatYen(tax);
 
-      // Adjustment row
-      const adjRow = document.getElementById('preview-adjustment-row');
-      if (state.adjustment !== 0) {
-        document.getElementById('preview-adjustment').innerText = (state.adjustment > 0 ? '+' : '') + formatYen(state.adjustment);
-        adjRow.classList.remove('hidden');
-      } else {
-        adjRow.classList.add('hidden');
-      }
+
 
       // Totals
       document.getElementById('preview-total').innerText = formatYen(totalAmount);
@@ -1240,12 +1211,7 @@
       renderInvoicePreview();
     });
 
-    document.getElementById('input-adjustment').addEventListener('input', (e) => {
-      state.adjustment = Number(e.target.value);
-      saveState();
-      validate();
-      renderInvoicePreview();
-    });
+
 
     document.getElementById('input-paid-amount').addEventListener('input', (e) => {
       state.paidAmount = Number(e.target.value);
@@ -1321,7 +1287,6 @@
         }];
 
         state.discount = 0;
-        state.adjustment = 0;
         state.taxRate = 10;
         state.isTaxInclusive = false;
         state.paidAmount = 0;
