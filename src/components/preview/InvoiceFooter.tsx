@@ -6,7 +6,6 @@ interface InvoiceFooterProps {
   tax: number;
   taxRate: number;
   isTaxInclusive: boolean;
-  adjustment: number;
   totalAmount: number;
   paidAmount: number;
   unpaidAmount: number;
@@ -19,7 +18,6 @@ export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
   tax,
   taxRate,
   isTaxInclusive,
-  adjustment,
   totalAmount,
   paidAmount,
   unpaidAmount,
@@ -52,14 +50,7 @@ export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
           </span>
         </div>
 
-        {adjustment !== 0 && (
-          <div className="flex justify-between items-center text-xs text-slate-500 font-medium">
-            <span>端数調整額</span>
-            <span className="font-semibold text-slate-700">
-              {adjustment > 0 ? '+' : ''}{formatYen(adjustment)}
-            </span>
-          </div>
-        )}
+
 
         {/* Total Amount (Highlight 1) */}
         <div className="flex justify-between items-center bg-slate-50 px-3.5 py-3 rounded-xl border border-slate-100 mt-2">
