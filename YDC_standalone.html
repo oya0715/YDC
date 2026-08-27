@@ -903,7 +903,7 @@
 
             <div class="sm:col-span-2 flex flex-col justify-end text-right">
               <span class="text-xs text-slate-400 font-semibold mb-1">金額</span>
-              <span class="text-base font-bold text-slate-700 py-1">${formatYen(item.unitPrice * item.quantity)}</span>
+              <span id="item-total-${item.id}" class="text-base font-bold text-slate-700 py-1">${formatYen(item.unitPrice * item.quantity)}</span>
             </div>
 
             ${shouldShowToothSelector(item.name) ? `
@@ -1189,6 +1189,15 @@
         return item;
       });
       saveState();
+      
+      const updatedItem = state.items.find(item => item.id === id);
+      if (updatedItem) {
+        const totalSpan = document.getElementById(`item-total-${id}`);
+        if (totalSpan) {
+          totalSpan.innerText = formatYen(updatedItem.unitPrice * updatedItem.quantity);
+        }
+      }
+
       // Only render items and totals (to prevent losing cursor focus inside inputs)
       validate();
       renderInvoicePreview();
