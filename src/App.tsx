@@ -31,7 +31,14 @@ function App() {
   // 1. States loaded from localStorage (or defaults)
   const [patientInfo, setPatientInfo] = useState<PatientInfo>(() => {
     const saved = localStorage.getItem('ydc_patient');
-    return saved ? JSON.parse(saved) : initialPatientInfo;
+    if (saved) {
+      const parsed = JSON.parse(saved) as PatientInfo;
+      if (!parsed.name) {
+        parsed.name = "山田 太郎";
+      }
+      return parsed;
+    }
+    return initialPatientInfo;
   });
 
   const [items, setItems] = useState<TreatmentItem[]>(() => {
