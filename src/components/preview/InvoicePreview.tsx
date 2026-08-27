@@ -12,7 +12,6 @@ interface InvoicePreviewProps {
   tax: number;
   taxRate: number;
   isTaxInclusive: boolean;
-  adjustment: number;
   totalAmount: number;
   paidAmount: number;
   unpaidAmount: number;
@@ -27,7 +26,6 @@ export const InvoicePreview: React.FC<InvoicePreviewProps> = ({
   tax,
   taxRate,
   isTaxInclusive,
-  adjustment,
   totalAmount,
   paidAmount,
   unpaidAmount,
@@ -59,7 +57,6 @@ export const InvoicePreview: React.FC<InvoicePreviewProps> = ({
           tax={tax}
           taxRate={taxRate}
           isTaxInclusive={isTaxInclusive}
-          adjustment={adjustment}
           totalAmount={totalAmount}
           paidAmount={paidAmount}
           unpaidAmount={unpaidAmount}
