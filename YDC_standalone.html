@@ -449,26 +449,26 @@
             <!-- Header Component -->
             <div class="flex flex-col md:flex-row justify-between items-start gap-4 pb-5 border-b-2 border-slate-100">
               <div>
-                <h2 class="text-xl font-bold text-slate-800 tracking-wider">請求書</h2>
+                <h2 class="text-xl font-semibold text-slate-800 tracking-wider">請求書</h2>
                 <div class="mt-2.5 space-y-1.5">
                   <div class="flex items-baseline gap-1">
-                    <span id="preview-patient-name" class="text-base font-bold text-slate-800 border-b border-slate-800 pb-0.5">山田 太郎</span>
-                    <span class="text-xs text-slate-500 font-semibold">様</span>
+                    <span id="preview-patient-name" class="text-base font-medium text-slate-800 border-b border-slate-800 pb-0.5">山田 太郎</span>
+                    <span class="text-xs text-slate-500 font-medium">様</span>
                   </div>
                 </div>
               </div>
               
               <div class="text-right space-y-1.5 self-stretch md:self-auto flex flex-col justify-between items-end">
-                <p id="preview-invoice-date" class="text-xs text-slate-500 font-semibold">請求日: 2026/08/26</p>
+                <p id="preview-invoice-date" class="text-xs text-slate-500 font-medium">請求日: 2026/08/26</p>
                 
                 <div class="text-right mt-1">
-                  <p class="text-sm font-bold text-slate-800">やまもと歯科</p>
+                  <p class="text-sm font-semibold text-slate-800">やまもと歯科</p>
                 </div>
               </div>
             </div>
 
             <!-- Message/Intro -->
-            <p class="text-xs text-slate-600 leading-relaxed">
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
               <span id="preview-patient-name-intro">山田 太郎</span>様の自費診療費の金額及び内訳は、下記のようになっております。　お手数ですが、振り込みもしくは受付にてご精算くださいますよう、よろしくお願い申し上げます。
             </p>
 
@@ -477,10 +477,10 @@
               <table class="min-w-full divide-y divide-slate-200">
                 <thead class="bg-slate-50">
                   <tr>
-                    <th class="px-3 py-2 text-left text-xs font-bold text-slate-500 tracking-wider">診療内容</th>
-                    <th class="px-2 py-2 text-center text-xs font-bold text-slate-500 tracking-wider">数量</th>
-                    <th class="px-3 py-2 text-right text-xs font-bold text-slate-500 tracking-wider">単価</th>
-                    <th class="px-3 py-2 text-right text-xs font-bold text-slate-500 tracking-wider">金額</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-slate-600 tracking-wider">診療内容</th>
+                    <th class="px-2 py-2 text-center text-xs font-medium text-slate-600 tracking-wider">数量</th>
+                    <th class="px-3 py-2 text-right text-xs font-medium text-slate-600 tracking-wider">単価</th>
+                    <th class="px-3 py-2 text-right text-xs font-medium text-slate-600 tracking-wider">金額</th>
                   </tr>
                 </thead>
                 <tbody id="preview-items-body" class="bg-white divide-y divide-slate-100">
@@ -488,21 +488,22 @@
                 </tbody>
               </table>
             </div>
-      <!-- Summary Block -->
+
+            <!-- Summary Block -->
             <div class="space-y-2 border-t border-slate-100 pt-4">
-              <div class="flex justify-between items-center text-xs text-slate-500 font-medium">
+              <div class="flex justify-between items-center text-xs text-slate-500 font-normal">
                 <span>小計</span>
-                <span id="preview-subtotal" class="font-semibold text-slate-700">¥0</span>
+                <span id="preview-subtotal" class="font-medium text-slate-700">¥0</span>
               </div>
 
-              <div id="preview-discount-row" class="flex justify-between items-center text-xs text-slate-500 font-medium hidden">
+              <div id="preview-discount-row" class="flex justify-between items-center text-xs text-slate-500 font-normal hidden">
                 <span>値引き</span>
-                <span id="preview-discount" class="font-semibold text-slate-700">-¥0</span>
+                <span id="preview-discount" class="font-medium text-slate-700">-¥0</span>
               </div>
 
-              <div class="flex justify-between items-center text-xs text-slate-500 font-medium">
+              <div class="flex justify-between items-center text-xs text-slate-500 font-normal">
                 <span id="preview-tax-label">消費税 (10% 外税)</span>
-                <span id="preview-tax" class="font-semibold text-slate-700">¥0</span>
+                <span id="preview-tax" class="font-medium text-slate-700">¥0</span>
               </div>
 
               <!-- Single Combined Billing Amount Box -->
@@ -967,12 +968,12 @@
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td class="px-3 py-2.5">
-            <p class="text-xs font-bold text-slate-800">${item.name}</p>
+            <p class="text-xs font-medium text-slate-800">${item.name}</p>
             ${item.note ? `<p class="text-[10px] text-slate-400 mt-0.5">${item.note}</p>` : ''}
           </td>
-          <td class="px-2 py-2.5 text-center text-xs text-slate-600 font-semibold">${item.quantity}</td>
-          <td class="px-3 py-2.5 text-right text-xs text-slate-600 font-semibold">${formatYen(item.unitPrice)}</td>
-          <td class="px-3 py-2.5 text-right text-xs text-slate-800 font-bold">${formatYen(item.unitPrice * item.quantity)}</td>
+          <td class="px-2 py-2.5 text-center text-xs text-slate-700 font-normal">${item.quantity}</td>
+          <td class="px-3 py-2.5 text-right text-xs text-slate-700 font-normal">${formatYen(item.unitPrice)}</td>
+          <td class="px-3 py-2.5 text-right text-xs text-slate-800 font-medium">${formatYen(item.unitPrice * item.quantity)}</td>
         `;
         tableBody.appendChild(tr);
       });
@@ -993,8 +994,6 @@
       document.getElementById('preview-tax-label').innerText = `消費税 (${state.taxRate}% ${state.isTaxInclusive ? '内税' : '外税'})`;
       document.getElementById('preview-tax').innerText = state.isTaxInclusive ? `(${formatYen(tax)})` : formatYen(tax);
 
-
-
       // Totals
       document.getElementById('preview-total').innerText = formatYen(totalAmount);
 
@@ -1004,23 +1003,23 @@
       if (state.invoiceType === 'implant') {
         guaranteeHTML = `
           <div class="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-lg text-[9px] text-slate-600 leading-relaxed space-y-1">
-            <p class="font-bold text-slate-800">＜保証について＞</p>
+            <p class="font-medium text-slate-800">＜保証について＞</p>
             <p>ガイドデント認定医療機関において、インプラント手術を受けられた患者さまの再手術および上部構造の修復についてはインプラント10年保証に基づいて保証させていただきます。</p>
-            <p class="font-semibold text-slate-700">※但し、当医院の指定する定期検診にすべて応じて頂いてる方にかぎります。</p>
+            <p class="font-medium text-slate-700">※但し、当医院の指定する定期検診にすべて応じて頂いてる方にかぎります。</p>
             <p>また、外傷・事故の場合は対象外とさせて頂きます。</p>
           </div>
         `;
       } else if (state.invoiceType === 'prostho') {
         guaranteeHTML = `
           <div class="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-lg text-[9px] text-slate-600 leading-relaxed space-y-1">
-            <p class="font-bold text-slate-800">＜保証について＞</p>
+            <p class="font-medium text-slate-800">＜保証について＞</p>
             <p>3年以内は当医院がすべて負担いたします。3年以降は、下記の割合でご負担いただきます。</p>
             <div class="pl-4 space-y-0.5">
               <p>・3年以降4年未満：患者さん負担5割</p>
               <p>・4年以降5年未満：患者さん負担6割</p>
               <p>・5年以降6年未満：患者さん負担7割</p>
             </div>
-            <p class="font-semibold text-slate-700">※但し、当医院の指定する定期検診にすべて応じて頂いてる方にかぎります。</p>
+            <p class="font-medium text-slate-700">※但し、当医院の指定する定期検診にすべて応じて頂いてる方にかぎります。</p>
             <p>また、外傷・事故の場合は対象外とさせて頂きます。</p>
           </div>
         `;
@@ -1028,41 +1027,41 @@
 
       footerContainer.innerHTML = `
         <div class="mt-6 border-t border-slate-100 pt-4 text-[10px] space-y-3">
-          <div class="space-y-1 text-slate-600 font-medium">
+          <div class="space-y-1 text-slate-600 font-normal">
             <p>支払い方法：現金受付払い・振込（三井住友銀行／兵庫信用金庫）・デンタルローン</p>
-            <p>支払い期日：（　　　　　　　　　　　　　　　　　）</p>
+            <p>支払い期日：（　　　　　　　　　　　　　　　　）</p>
           </div>
           
-          <p class="text-[9px] text-slate-500 mt-1 font-semibold">お振込みの際は下記口座へお願い致します。</p>
+          <p class="text-[9px] text-slate-500 mt-1 font-medium">お振込みの際は下記口座へお願い致します。</p>
           <div class="overflow-hidden border border-slate-200 rounded-lg">
             <table class="min-w-full divide-y divide-slate-200 text-center">
               <thead class="bg-slate-50">
                 <tr class="divide-x divide-slate-200">
-                  <th class="px-2 py-1 font-bold text-slate-500">銀行名</th>
-                  <td class="px-2 py-1 font-semibold text-slate-700">三井住友銀行</td>
-                  <td class="px-2 py-1 font-semibold text-slate-700">兵庫信用金庫</td>
+                  <th class="px-2 py-1 font-medium text-slate-600">銀行名</th>
+                  <td class="px-2 py-1 font-medium text-slate-700">三井住友銀行</td>
+                  <td class="px-2 py-1 font-medium text-slate-700">兵庫信用金庫</td>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-200">
                 <tr class="divide-x divide-slate-200">
-                  <th class="px-2 py-1 font-bold text-slate-500 bg-slate-50/50">支店名</th>
-                  <td class="px-2 py-1 text-slate-600">網干支店</td>
-                  <td class="px-2 py-1 text-slate-600">御津支店</td>
+                  <th class="px-2 py-1 font-medium text-slate-600 bg-slate-50/50">支店名</th>
+                  <td class="px-2 py-1 text-slate-600 font-normal">網干支店</td>
+                  <td class="px-2 py-1 text-slate-600 font-normal">御津支店</td>
                 </tr>
                 <tr class="divide-x divide-slate-200">
-                  <th class="px-2 py-1 font-bold text-slate-500 bg-slate-50/50">口座種類</th>
-                  <td class="px-2 py-1 text-slate-600">普通</td>
-                  <td class="px-2 py-1 text-slate-600">普通</td>
+                  <th class="px-2 py-1 font-medium text-slate-600 bg-slate-50/50">口座種類</th>
+                  <td class="px-2 py-1 text-slate-600 font-normal">普通</td>
+                  <td class="px-2 py-1 text-slate-600 font-normal">普通</td>
                 </tr>
                 <tr class="divide-x divide-slate-200">
-                  <th class="px-2 py-1 font-bold text-slate-500 bg-slate-50/50">口座番号</th>
-                  <td class="px-2 py-1 font-bold text-slate-800">3215296</td>
-                  <td class="px-2 py-1 font-bold text-slate-800">0179190</td>
+                  <th class="px-2 py-1 font-medium text-slate-600 bg-slate-50/50">口座番号</th>
+                  <td class="px-2 py-1 font-medium text-slate-800">3215296</td>
+                  <td class="px-2 py-1 font-medium text-slate-800">0179190</td>
                 </tr>
                 <tr class="divide-x divide-slate-200">
-                  <th class="px-2 py-1 font-bold text-slate-500 bg-slate-50/50">名義人</th>
-                  <td class="px-2 py-1 text-slate-600 tracking-wider">ヤマモト タカフミ</td>
-                  <td class="px-2 py-1 text-slate-600 tracking-wider">ヤマモト タカフミ</td>
+                  <th class="px-2 py-1 font-medium text-slate-600 bg-slate-50/50">名義人</th>
+                  <td class="px-2 py-1 text-slate-600 tracking-wider font-normal">ヤマモト タカフミ</td>
+                  <td class="px-2 py-1 text-slate-600 tracking-wider font-normal">ヤマモト タカフミ</td>
                 </tr>
               </tbody>
             </table>
@@ -1070,22 +1069,22 @@
 
           ${guaranteeHTML}
 
-          <div class="mt-6 pt-4 border-t border-slate-200 flex flex-col items-end space-y-4 text-slate-800">
-            <div class="w-full text-left font-semibold text-xs text-slate-600">
+          <div class="mt-5 pt-3 border-t border-slate-100 flex flex-col items-end space-y-3 text-slate-700">
+            <div class="w-full text-left font-normal text-[9px] text-slate-500">
               上記の内容について説明をうけ了承した。
             </div>
-            <div class="flex flex-col gap-4 w-full max-w-[380px] self-end pt-2">
-              <div class="flex justify-between items-end border-b-2 border-slate-400 pb-2 min-h-[44px]">
-                <span class="font-bold text-base shrink-0 mr-4">患者署名</span>
+            <div class="flex flex-col gap-2 w-full max-w-[280px] self-end pt-1">
+              <div class="flex justify-between items-baseline border-b border-slate-300 pb-0.5">
+                <span class="font-medium text-xs text-slate-700 shrink-0">患者署名</span>
                 <span class="w-full"></span>
               </div>
-              <div class="flex justify-between items-end border-b-2 border-slate-400 pb-2 min-h-[44px]">
-                <span class="font-bold text-base shrink-0 mr-4">代理人署名</span>
+              <div class="flex justify-between items-baseline border-b border-slate-300 pb-0.5">
+                <span class="font-medium text-xs text-slate-700 shrink-0">代理人署名</span>
                 <span class="w-full"></span>
-                <span class="font-semibold text-xs shrink-0 text-slate-500 ml-2">（続柄）__________</span>
+                <span class="font-normal text-[8px] shrink-0 text-slate-400">（続柄）______</span>
               </div>
             </div>
-            <div class="text-right text-xs text-slate-600 font-bold pt-1">
+            <div class="text-right text-[9px] text-slate-500 font-medium pt-0.5">
               やまもと歯科
             </div>
           </div>
