@@ -7,8 +7,6 @@ interface InvoiceFooterProps {
   taxRate: number;
   isTaxInclusive: boolean;
   totalAmount: number;
-  paidAmount: number;
-  unpaidAmount: number;
   invoiceType: string;
 }
 
@@ -19,8 +17,6 @@ export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
   taxRate,
   isTaxInclusive,
   totalAmount,
-  paidAmount,
-  unpaidAmount,
   invoiceType,
 }) => {
   const formatYen = (amount: number) => {
@@ -50,28 +46,10 @@ export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
           </span>
         </div>
 
-
-
-        {/* Total Amount (Highlight 1) */}
-        <div className="flex justify-between items-center bg-slate-50 px-3.5 py-3 rounded-xl border border-slate-100 mt-2">
-          <span className="text-sm font-bold text-slate-600">請求合計金額（税込）</span>
-          <span className="text-lg font-black text-slate-800 tracking-wide">{formatYen(totalAmount)}</span>
-        </div>
-
-        {paidAmount > 0 && (
-          <div className="flex justify-between items-center text-xs text-slate-500 font-medium px-1 mt-2">
-            <span>支払済み金額</span>
-            <span className="font-semibold text-slate-700">{formatYen(paidAmount)}</span>
-          </div>
-        )}
-
-        {/* Remaining Unpaid Amount (Highlight 2) */}
-        <div className="flex justify-between items-center bg-slate-100 border border-slate-200 px-3.5 py-3.5 rounded-xl mt-3">
-          <div className="flex flex-col">
-            <span className="text-xs font-bold text-slate-700">今回ご請求金額</span>
-            <span className="text-[9px] text-slate-500 font-medium mt-0.5">(合計金額 - 既収金)</span>
-          </div>
-          <span className="text-xl font-extrabold text-slate-800 tracking-wide">{formatYen(unpaidAmount)}</span>
+        {/* Single Combined Billing Amount Box */}
+        <div className="flex justify-between items-center bg-slate-100 border border-slate-300 px-4 py-3.5 rounded-xl mt-3">
+          <span className="text-sm font-bold text-slate-800">ご請求金額（税込）</span>
+          <span className="text-xl font-extrabold text-slate-900 tracking-wide font-sans">{formatYen(totalAmount)}</span>
         </div>
       </div>
 
@@ -141,23 +119,23 @@ export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
           </div>
         )}
 
-        {/* Signatures block */}
-        <div className="mt-5 pt-3 border-t border-slate-100 flex flex-col items-end space-y-3 text-slate-700">
-          <div className="w-full text-left font-medium text-[9px] text-slate-400">
+        {/* Signatures block (Enlarged 1.5x for patient legibility and signing comfort) */}
+        <div className="mt-6 pt-4 border-t border-slate-200 flex flex-col items-end space-y-4 text-slate-800">
+          <div className="w-full text-left font-semibold text-xs text-slate-600">
             上記の内容について説明をうけ了承した。
           </div>
-          <div className="flex flex-col gap-2 w-full max-w-[280px] self-end pt-1">
-            <div className="flex justify-between items-baseline border-b border-slate-300 pb-0.5">
-              <span className="font-semibold shrink-0">患者署名</span>
+          <div className="flex flex-col gap-4 w-full max-w-[380px] self-end pt-2">
+            <div className="flex justify-between items-end border-b-2 border-slate-400 pb-2 min-h-[44px]">
+              <span className="font-bold text-base shrink-0 mr-4">患者署名</span>
               <span className="w-full"></span>
             </div>
-            <div className="flex justify-between items-baseline border-b border-slate-300 pb-0.5">
-              <span className="font-semibold shrink-0">代理人署名</span>
+            <div className="flex justify-between items-end border-b-2 border-slate-400 pb-2 min-h-[44px]">
+              <span className="font-bold text-base shrink-0 mr-4">代理人署名</span>
               <span className="w-full"></span>
-              <span className="font-medium text-[8px] shrink-0 text-slate-400">（続柄）______</span>
+              <span className="font-semibold text-xs shrink-0 text-slate-500 ml-2">（続柄）__________</span>
             </div>
           </div>
-          <div className="text-right text-[9px] text-slate-500 font-bold pt-0.5">
+          <div className="text-right text-xs text-slate-600 font-bold pt-1">
             やまもと歯科
           </div>
         </div>
