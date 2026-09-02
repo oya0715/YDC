@@ -146,8 +146,8 @@ function App() {
       const maxHeight = 960; // 96 DPI safe limit for A4 portrait
       let scale = 1.0;
       let height = container.scrollHeight;
-      while (height > maxHeight && scale > 0.6) {
-        scale -= 0.05;
+      while (height > maxHeight && scale > 0.88) {
+        scale -= 0.03;
         container.style.setProperty('--print-scale', String(scale));
         height = container.scrollHeight;
       }
