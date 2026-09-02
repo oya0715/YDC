@@ -143,13 +143,26 @@ function App() {
       const container = document.querySelector('.print-container') as HTMLElement;
       if (!container) return;
       container.style.setProperty('--print-scale', '1');
-      const maxHeight = 960; // 96 DPI safe limit for A4 portrait
-      let scale = 1.0;
+      container.style.setProperty('--print-spacing-scale', '1');
+      const maxHeight = 920; // 96 DPI safe limit for A4 portrait
+      let spacingScale = 1.0;
       let height = container.scrollHeight;
-      while (height > maxHeight && scale > 0.88) {
-        scale -= 0.03;
-        container.style.setProperty('--print-scale', String(scale));
+      
+      // Step 1: Compress vertical spacing/padding first (keeps font size 100% large)
+      while (height > maxHeight && spacingScale > 0.3) {
+        spacingScale -= 0.05;
+        container.style.setProperty('--print-spacing-scale', String(spacingScale));
         height = container.scrollHeight;
+      }
+
+      // Step 2: If still overflowing, adjust font scale slightly (down to min 0.88)
+      if (height > maxHeight) {
+        let fontScale = 1.0;
+        while (height > maxHeight && fontScale > 0.88) {
+          fontScale -= 0.02;
+          container.style.setProperty('--print-scale', String(fontScale));
+          height = container.scrollHeight;
+        }
       }
     };
 
@@ -157,6 +170,7 @@ function App() {
       const container = document.querySelector('.print-container') as HTMLElement;
       if (container) {
         container.style.setProperty('--print-scale', '1');
+        container.style.setProperty('--print-spacing-scale', '1');
       }
     };
 
