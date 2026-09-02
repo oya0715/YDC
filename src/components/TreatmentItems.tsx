@@ -10,7 +10,9 @@ interface TreatmentItemsProps {
 const PRESETS = [
   // 補綴
   { category: "補綴", name: "ハイブリッドIn", price: 30000 },
+  { category: "補綴", name: "ハイブリッドOn", price: 40000 },
   { category: "補綴", name: "セラミックIn／ジルコニアIn", price: 50000 },
+  { category: "補綴", name: "セラミックOn／ジルコニアOn", price: 60000 },
   { category: "補綴", name: "フルジルコニアcr", price: 100000 },
   { category: "補綴", name: "オールセラミック", price: 120000 },
   { category: "補綴", name: "ジルコニアセラミック", price: 140000 },
