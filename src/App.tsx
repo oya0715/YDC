@@ -72,11 +72,6 @@ function App() {
     return saved ? JSON.parse(saved) : false;
   });
 
-  const [paidAmount, setPaidAmount] = useState<number>(() => {
-    const saved = localStorage.getItem('ydc_paid');
-    return saved ? Number(saved) : 0;
-  });
-
   const [invoiceType, setInvoiceType] = useState<string>(() => {
     const saved = localStorage.getItem('ydc_invoice_type');
     return saved || 'implant';
@@ -97,8 +92,6 @@ function App() {
     localStorage.setItem('ydc_discount', String(discount));
   }, [discount]);
 
-
-
   useEffect(() => {
     localStorage.setItem('ydc_tax_rate', String(taxRate));
   }, [taxRate]);
@@ -106,10 +99,6 @@ function App() {
   useEffect(() => {
     localStorage.setItem('ydc_tax_inc', JSON.stringify(isTaxInclusive));
   }, [isTaxInclusive]);
-
-  useEffect(() => {
-    localStorage.setItem('ydc_paid', String(paidAmount));
-  }, [paidAmount]);
 
   useEffect(() => {
     localStorage.setItem('ydc_invoice_type', invoiceType);
@@ -130,12 +119,10 @@ function App() {
       setValidationError("値引き額は0以上で入力してください。");
     } else if (taxRate < 0 || taxRate > 100) {
       setValidationError("税率は0%〜100%の間で入力してください。");
-    } else if (paidAmount < 0) {
-      setValidationError("支払済み金額は0以上で入力してください。");
     } else {
       setValidationError(null);
     }
-  }, [patientInfo, items, discount, taxRate, paidAmount]);
+  }, [patientInfo, items, discount, taxRate]);
 
   // Dynamic A4 single-page scaling hook
   useEffect(() => {
@@ -199,8 +186,6 @@ function App() {
     totalAmount = Math.max(0, taxBase + tax);
   }
 
-  const unpaidAmount = Math.max(0, totalAmount - paidAmount);
-
   // 3. Handlers
   const handleInvoiceTypeChange = (newType: string) => {
     setInvoiceType(newType);
@@ -232,7 +217,6 @@ function App() {
       setDiscount(0);
       setTaxRate(10);
       setIsTaxInclusive(false);
-      setPaidAmount(0);
       setInvoiceType('implant');
     }
   };
@@ -320,8 +304,6 @@ function App() {
             setTaxRate={setTaxRate}
             discount={discount}
             setDiscount={setDiscount}
-            paidAmount={paidAmount}
-            setPaidAmount={setPaidAmount}
           />
 
         </div>
@@ -337,8 +319,6 @@ function App() {
             taxRate={taxRate}
             isTaxInclusive={isTaxInclusive}
             totalAmount={totalAmount}
-            paidAmount={paidAmount}
-            unpaidAmount={unpaidAmount}
             invoiceType={invoiceType}
           />
         </div>
