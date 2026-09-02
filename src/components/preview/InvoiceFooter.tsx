@@ -119,23 +119,23 @@ export const InvoiceFooter: React.FC<InvoiceFooterProps> = ({
           </div>
         )}
 
-        {/* Signatures block (Matching reference screenshot) */}
+        {/* Signatures block (1.2x scale) */}
         <div className="mt-5 pt-3 border-t border-slate-100 flex flex-col items-end space-y-3 text-slate-700">
-          <div className="w-full text-left font-normal text-[9px] text-slate-500">
+          <div className="w-full text-left font-normal text-[10px] text-slate-500">
             上記の内容について説明をうけ了承した。
           </div>
-          <div className="flex flex-col gap-2 w-full max-w-[280px] self-end pt-1">
-            <div className="flex justify-between items-baseline border-b border-slate-300 pb-0.5">
-              <span className="font-medium text-xs text-slate-700 shrink-0">患者署名</span>
+          <div className="flex flex-col gap-2.5 w-full max-w-[336px] self-end pt-1">
+            <div className="flex justify-between items-baseline border-b border-slate-300 pb-1">
+              <span className="font-medium text-[13px] text-slate-700 shrink-0">患者署名</span>
               <span className="w-full"></span>
             </div>
-            <div className="flex justify-between items-baseline border-b border-slate-300 pb-0.5">
-              <span className="font-medium text-xs text-slate-700 shrink-0">代理人署名</span>
+            <div className="flex justify-between items-baseline border-b border-slate-300 pb-1">
+              <span className="font-medium text-[13px] text-slate-700 shrink-0">代理人署名</span>
               <span className="w-full"></span>
-              <span className="font-normal text-[8px] shrink-0 text-slate-400">（続柄）______</span>
+              <span className="font-normal text-[9px] shrink-0 text-slate-400">（続柄）______</span>
             </div>
           </div>
-          <div className="text-right text-[9px] text-slate-500 font-medium pt-0.5">
+          <div className="text-right text-[10px] text-slate-500 font-medium pt-0.5">
             やまもと歯科
           </div>
         </div>
