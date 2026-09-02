@@ -415,7 +415,7 @@
             </div>
 
             <!-- Discount -->
-            <div>
+            <div class="md:col-span-2">
               <label class="block text-xs font-semibold text-slate-500 mb-1">値引き額</label>
               <div class="relative">
                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">¥</span>
@@ -425,21 +425,6 @@
                   placeholder="0"
                   min="0"
                   class="w-full pl-7 pr-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-clinic-500 bg-slate-50/50 text-right font-semibold text-slate-700"
-                />
-              </div>
-            </div>
-
-            <!-- Paid Amount -->
-            <div>
-              <label class="block text-xs font-semibold text-slate-500 mb-1">支払済み金額 (本日領収額など)</label>
-              <div class="relative">
-                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-bold">¥</span>
-                <input
-                  type="number"
-                  id="input-paid-amount"
-                  placeholder="0"
-                  min="0"
-                  class="w-full pl-8 pr-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-clinic-500 bg-teal-50/20 text-right font-bold text-slate-800 text-base"
                 />
               </div>
             </div>
@@ -503,8 +488,7 @@
                 </tbody>
               </table>
             </div>
-
-            <!-- Summary Block -->
+      <!-- Summary Block -->
             <div class="space-y-2 border-t border-slate-100 pt-4">
               <div class="flex justify-between items-center text-xs text-slate-500 font-medium">
                 <span>小計</span>
@@ -521,26 +505,10 @@
                 <span id="preview-tax" class="font-semibold text-slate-700">¥0</span>
               </div>
 
-
-
-              <!-- Total Amount -->
-              <div class="flex justify-between items-center bg-slate-50 px-3.5 py-3 rounded-xl border border-slate-100 mt-2">
-                <span class="text-sm font-bold text-slate-600">請求合計金額（税込）</span>
-                <span id="preview-total" class="text-lg font-black text-slate-800 tracking-wide">¥0</span>
-              </div>
-
-              <div id="preview-paid-row" class="flex justify-between items-center text-xs text-slate-500 font-medium px-1 mt-2 hidden">
-                <span>支払済み金額</span>
-                <span id="preview-paid" class="font-semibold text-slate-700">¥0</span>
-              </div>
-
-              <!-- Remaining Unpaid Amount -->
-              <div class="flex justify-between items-center bg-slate-100 border border-slate-200 px-3.5 py-3.5 rounded-xl mt-3">
-                <div class="flex flex-col">
-                  <span class="text-xs font-bold text-slate-800">今回ご請求金額</span>
-                  <span class="text-[9px] text-slate-500 font-medium mt-0.5">(合計金額 - 既収金)</span>
-                </div>
-                <span id="preview-unpaid" class="text-xl font-extrabold text-slate-900 tracking-wide font-sans">¥0</span>
+              <!-- Single Combined Billing Amount Box -->
+              <div class="flex justify-between items-center bg-slate-100 border border-slate-300 px-4 py-3.5 rounded-xl mt-3">
+                <span class="text-sm font-bold text-slate-800">ご請求金額（税込）</span>
+                <span id="preview-total" class="text-xl font-extrabold text-slate-900 tracking-wide font-sans">¥0</span>
               </div>
 
             </div>
@@ -723,7 +691,6 @@
       discount: 0,
       taxRate: 10,
       isTaxInclusive: false,
-      paidAmount: 0,
       invoiceType: 'implant'
     };
 
@@ -735,7 +702,6 @@
         const savedDiscount = localStorage.getItem('ydc_discount');
         const savedTaxRate = localStorage.getItem('ydc_tax_rate');
         const savedTaxInc = localStorage.getItem('ydc_tax_inc');
-        const savedPaid = localStorage.getItem('ydc_paid');
         const savedInvoiceType = localStorage.getItem('ydc_invoice_type');
 
         if (savedPatient) {
@@ -755,7 +721,6 @@
         if (savedDiscount) state.discount = Number(savedDiscount);
         if (savedTaxRate) state.taxRate = Number(savedTaxRate);
         if (savedTaxInc) state.isTaxInclusive = JSON.parse(savedTaxInc);
-        if (savedPaid) state.paidAmount = Number(savedPaid);
         if (savedInvoiceType) state.invoiceType = savedInvoiceType;
       } catch (e) {
         console.error("Error loading localStorage state:", e);
@@ -769,7 +734,6 @@
         localStorage.setItem('ydc_discount', String(state.discount));
         localStorage.setItem('ydc_tax_rate', String(state.taxRate));
         localStorage.setItem('ydc_tax_inc', JSON.stringify(state.isTaxInclusive));
-        localStorage.setItem('ydc_paid', String(state.paidAmount));
         localStorage.setItem('ydc_invoice_type', state.invoiceType);
       } catch (e) {
         console.error("Error saving localStorage state:", e);
@@ -795,9 +759,7 @@
         totalAmount = Math.max(0, taxBase + tax);
       }
 
-      const unpaidAmount = Math.max(0, totalAmount - state.paidAmount);
-
-      return { subtotal, tax, totalAmount, unpaidAmount };
+      return { subtotal, tax, totalAmount };
     }
 
     // 5. Validation Check
@@ -819,8 +781,6 @@
         error = "値引き額は0以上で入力してください。";
       } else if (state.taxRate < 0 || state.taxRate > 100) {
         error = "税率は0%〜100%の間で入力してください。";
-      } else if (state.paidAmount < 0) {
-        error = "支払済み金額は0以上で入力してください。";
       }
 
       if (error) {
@@ -845,7 +805,6 @@
 
       document.getElementById('input-tax-rate').value = state.taxRate;
       document.getElementById('input-discount').value = state.discount || '';
-      document.getElementById('input-paid-amount').value = state.paidAmount || '';
 
       // Toggles styles
       const taxExcl = document.getElementById('tax-excl-toggle');
@@ -1039,18 +998,6 @@
       // Totals
       document.getElementById('preview-total').innerText = formatYen(totalAmount);
 
-      // Paid row
-      const paidRow = document.getElementById('preview-paid-row');
-      if (state.paidAmount > 0) {
-        document.getElementById('preview-paid').innerText = formatYen(state.paidAmount);
-        paidRow.classList.remove('hidden');
-      } else {
-        paidRow.classList.add('hidden');
-      }
-
-      // Balance
-      document.getElementById('preview-unpaid').innerText = formatYen(unpaidAmount);
-
       // Dynamic footer notes, payment details, guarantees and signatures
       const footerContainer = document.getElementById('preview-footer-container');
       let guaranteeHTML = '';
@@ -1123,22 +1070,22 @@
 
           ${guaranteeHTML}
 
-          <div class="mt-5 pt-3 border-t border-slate-100 flex flex-col items-end space-y-3 text-slate-700">
-            <div class="w-full text-left font-medium text-[9px] text-slate-400">
+          <div class="mt-6 pt-4 border-t border-slate-200 flex flex-col items-end space-y-4 text-slate-800">
+            <div class="w-full text-left font-semibold text-xs text-slate-600">
               上記の内容について説明をうけ了承した。
             </div>
-            <div class="flex flex-col gap-2 w-full max-w-[280px] self-end pt-1">
-              <div class="flex justify-between items-baseline border-b border-slate-300 pb-0.5">
-                <span class="font-semibold shrink-0">患者署名</span>
+            <div class="flex flex-col gap-4 w-full max-w-[380px] self-end pt-2">
+              <div class="flex justify-between items-end border-b-2 border-slate-400 pb-2 min-h-[44px]">
+                <span class="font-bold text-base shrink-0 mr-4">患者署名</span>
                 <span class="w-full"></span>
               </div>
-              <div class="flex justify-between items-baseline border-b border-slate-300 pb-0.5">
-                <span class="font-semibold shrink-0">代理人署名</span>
+              <div class="flex justify-between items-end border-b-2 border-slate-400 pb-2 min-h-[44px]">
+                <span class="font-bold text-base shrink-0 mr-4">代理人署名</span>
                 <span class="w-full"></span>
-                <span class="font-medium text-[8px] shrink-0 text-slate-400">（続柄）______</span>
+                <span class="font-semibold text-xs shrink-0 text-slate-500 ml-2">（続柄）__________</span>
               </div>
             </div>
-            <div class="text-right text-[9px] text-slate-500 font-bold pt-0.5">
+            <div class="text-right text-xs text-slate-600 font-bold pt-1">
               やまもと歯科
             </div>
           </div>
@@ -1266,13 +1213,6 @@
 
 
 
-    document.getElementById('input-paid-amount').addEventListener('input', (e) => {
-      state.paidAmount = Number(e.target.value);
-      saveState();
-      validate();
-      renderInvoicePreview();
-    });
-
     // Tax mode buttons
     document.getElementById('tax-excl-toggle').addEventListener('click', () => {
       state.isTaxInclusive = false;
@@ -1342,7 +1282,6 @@
         state.discount = 0;
         state.taxRate = 10;
         state.isTaxInclusive = false;
-        state.paidAmount = 0;
         saveState();
         renderAll();
       }
