@@ -112,24 +112,24 @@
         background: #ffffff !important;
         
         --print-scale: 1;
-        --size-9px: calc(14px * var(--print-scale));
-        --size-10px: calc(15px * var(--print-scale));
-        --size-xs: calc(17.5px * var(--print-scale));
-        --size-sm: calc(19.5px * var(--print-scale));
-        --size-base: calc(21.5px * var(--print-scale));
-        --size-lg: calc(23px * var(--print-scale));
-        --size-xl: calc(28px * var(--print-scale));
-        --size-2xl: calc(34px * var(--print-scale));
+        --size-9px: calc(14.5px * var(--print-scale));
+        --size-10px: calc(15.5px * var(--print-scale));
+        --size-xs: calc(18px * var(--print-scale));
+        --size-sm: calc(20px * var(--print-scale));
+        --size-base: calc(22px * var(--print-scale));
+        --size-lg: calc(24px * var(--print-scale));
+        --size-xl: calc(29px * var(--print-scale));
+        --size-2xl: calc(35px * var(--print-scale));
         
-        --space-y-6-mt: calc(1.25rem * var(--print-scale));
-        --space-y-4-mt: calc(0.75rem * var(--print-scale));
-        --space-y-3-mt: calc(0.6rem * var(--print-scale));
-        --space-y-2-mt: calc(0.4rem * var(--print-scale));
+        --space-y-6-mt: calc(1.0rem * var(--print-scale));
+        --space-y-4-mt: calc(0.6rem * var(--print-scale));
+        --space-y-3-mt: calc(0.45rem * var(--print-scale));
+        --space-y-2-mt: calc(0.3rem * var(--print-scale));
         
-        --td-py: calc(0.55rem * var(--print-scale));
-        --td-px: calc(0.75rem * var(--print-scale));
+        --td-py: calc(0.45rem * var(--print-scale));
+        --td-px: calc(0.65rem * var(--print-scale));
         
-        font-size: calc(19px * var(--print-scale)) !important;
+        font-size: calc(19.5px * var(--print-scale)) !important;
       }
 
       /* Scale text sizes inside the printed document for elderly legibility */
@@ -1361,8 +1361,8 @@
       let scale = 1.0;
       let height = container.scrollHeight;
       
-      while (height > maxHeight && scale > 0.6) {
-        scale -= 0.05;
+      while (height > maxHeight && scale > 0.88) {
+        scale -= 0.03;
         container.style.setProperty('--print-scale', String(scale));
         height = container.scrollHeight;
       }
