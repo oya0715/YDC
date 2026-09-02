@@ -21,20 +21,20 @@ export const InvoiceHeader: React.FC<InvoiceHeaderProps> = ({ patientInfo }) => 
   return (
     <div className="flex flex-col md:flex-row justify-between items-start gap-4 pb-5 border-b-2 border-slate-100">
       <div>
-        <h2 className="text-xl font-bold text-slate-800 tracking-wider">請求書</h2>
+        <h2 className="text-xl font-semibold text-slate-800 tracking-wider">請求書</h2>
         <div className="mt-2.5 space-y-1.5">
           <div className="flex items-baseline gap-1">
-            <span className="text-base font-bold text-slate-800 border-b border-slate-800 pb-0.5">{patientInfo.name || "山田 太郎"}</span>
-            <span className="text-xs text-slate-500 font-semibold">様</span>
+            <span className="text-base font-medium text-slate-800 border-b border-slate-800 pb-0.5">{patientInfo.name || "山田 太郎"}</span>
+            <span className="text-xs text-slate-500 font-medium">様</span>
           </div>
         </div>
       </div>
       
       <div className="text-right space-y-1.5 self-stretch md:self-auto flex flex-col justify-between items-end">
-        <p className="text-xs text-slate-500 font-semibold">請求日: {formattedDate}</p>
+        <p className="text-xs text-slate-500 font-medium">請求日: {formattedDate}</p>
         
         <div className="text-right mt-1">
-          <p className="text-sm font-bold text-slate-800">やまもと歯科</p>
+          <p className="text-sm font-semibold text-slate-800">やまもと歯科</p>
         </div>
       </div>
     </div>
